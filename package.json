@@ -1,0 +1,61 @@
+{
+  "name": "woodchainapp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+  },
+  "dependencies": {
+    "@react-native-community/async-storage": "^1.9.0",
+    "@react-native-community/checkbox": "^0.3.0",
+    "@react-native-community/geolocation": "^2.0.2",
+    "@react-native-community/netinfo": "^5.7.0",
+    "@react-native-mapbox-gl/maps": "^8.0.0-rc5",
+    "react": "16.11.0",
+    "react-native": "0.62.1",
+    "react-native-geolocation-service": "^4.0.0",
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-modal": "^11.5.6",
+    "react-native-navigation": "^6.4.0",
+    "react-native-navigation-hooks": "^5.0.0",
+    "react-native-vector-icons": "^6.6.0",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "@react-native-community/eslint-config": "^1.0.0",
+    "@types/jest": "^24.0.24",
+    "@types/react-native": "^0.62.0",
+    "@types/react-native-vector-icons": "^6.4.5",
+    "@types/react-redux": "^7.1.7",
+    "@types/react-test-renderer": "16.9.2",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.5.1",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.58.0",
+    "prettier": "^2.0.2",
+    "react-test-renderer": "16.11.0",
+    "typescript": "^3.8.3"
+  },
+  "jest": {
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}
