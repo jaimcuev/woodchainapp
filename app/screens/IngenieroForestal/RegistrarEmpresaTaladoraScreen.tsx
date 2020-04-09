@@ -12,25 +12,26 @@ const RegistrarEmpresaTaladoraScreen = (props: any) => {
   const [empresas, setEmpresas] = useState([]);
   useEffect(() => {
     props.loadingAlerta("Evaluando transacción en la red.");
-    getEmpresasTaladoras().then( (result: any) => {
-      if( result.status ) {
+    getEmpresasTaladoras().then((result: any) => {
+      if (result.status) {
         props.closeAlerta();
         setEmpresas(result.data);
       } else {
         props.errorAlerta(result.message);
       }
-    } );
+    });
     return () => {
     }
   }, []);
   const onPressRegistrarEmpresaTaladora = (empresa: any) => {
     // TODO: Se debe eliminar toda la data previa
     props.storeAnexo({ id: empresa.id });
+    props.passEmpresa(empresa.id);
     Navigation.popToRoot(props.componentId);
   };
   return (
     <Container style={styles.containerView}>
-      { empresas && empresas.length > 0 && empresas.map( (empresa: any, index: number) => {
+      {empresas && empresas.length > 0 && empresas.map((empresa: any, index: number) => {
         return <Option
           key={empresa.id}
           number={index + 1}
@@ -39,7 +40,7 @@ const RegistrarEmpresaTaladoraScreen = (props: any) => {
           onPress={() => onPressRegistrarEmpresaTaladora(empresa)}
           actionName={'Anexar'}
         />
-      } ) }
+      })}
     </Container>
   );
 };

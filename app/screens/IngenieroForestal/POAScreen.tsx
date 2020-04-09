@@ -49,102 +49,102 @@ const POAScreen = (props: any) => {
   ];
   const [isFetch, setIsFetch] = useState(false);
   const [procesOptions, setProcesOptions] = useState(options);
-  
+
   useNavigationComponentDidAppear(e => {
-    const formsIds = options.map( item => item.id );
-    getFormsStorage( formsIds, (result: any) => {
-      setIsFetch(true);
-      const data = procesOptions.map( (item: any) => {
+    setIsFetch(true);
+    const formsIds = options.map(item => item.id);
+    getFormsStorage(formsIds, (result: any) => {
+      const data = procesOptions.map((item: any) => {
         item.data = result[item.id] || {};
         item.actionName = result[item.id] ? 'Continuar' : 'Iniciar';
         return item;
-      } )
+      })
       setProcesOptions(data);
-    } );
+    });
     return () => {
     }
   }, props.componentId);
 
   const onPressEliminar = () => {
-    const formsIds = options.map( item => item.id );
+    const formsIds = options.map(item => item.id);
     deleteFormsStorage(formsIds, () => {
-      eliminarActividad('POA').then( () => {
+      eliminarActividad('POA').then(() => {
         Navigation.popToRoot(props.componentId);
-      } )
+      })
     });
   };
   const onPressEnviar = () => {
-    if( !props.empresa ) {
+    if (!props.empresa) {
       console.error("NO HAY EMPRESA ANEXADA");
     } else {
       let blockchain_result = {} as any;
-      procesOptions.forEach( (papi_item: any) => {
+      procesOptions.forEach((papi_item: any) => {
         const keys = Object.keys(papi_item.data);
         let papi_result = {};
         blockchain_result[papi_item.id] = {};
-        keys.forEach( mydata => {
+        keys.forEach(mydata => {
           const metadata = papi_item.data[mydata];
           const localData = LocalToBlockchain(metadata, mydata);
           papi_result = mergeData(papi_result, localData);
-        } );
+        });
         papi_item.blockchainData = papi_result;
         blockchain_result[papi_item.id] = papi_result;
         return papi_result;
-      } );
-      getArboles().then( arboles => {
-        if( arboles ) {
+      });
+      getArboles().then(arboles => {
+        if (arboles) {
           const papi_arboles = [] as any;
           arboles.forEach((element: any) => {
             const keys = Object.keys(element);
             let arbolito = {} as any;
-            keys.forEach( mydata => {
+            keys.forEach(mydata => {
               const metadata = element[mydata];
               const localData = LocalToBlockchain(metadata, mydata);
               arbolito = mergeData(arbolito, localData);
-            } );
+            });
             papi_arboles.push(arbolito);
           });
           const usuarioId = props.usuario.id;
-          if( usuarioId ) {
+          if (usuarioId) {
             blockchain_result['POAInformacionGeneral']['ingenieroForestal']['usuarioId'] = usuarioId;
             blockchain_result['parentUsuario'] = props.empresa;
             console.warn(blockchain_result);
-            createPOA(blockchain_result).then( resultado => {
-              if( resultado.status ) {
+            createPOA(blockchain_result).then(resultado => {
+              if (resultado.status) {
                 const poaId = resultado.data;
-                const god_arboles = papi_arboles.map( (item: any) => {
+                const god_arboles = papi_arboles.map((item: any) => {
                   item.poaId = poaId;
                   return item;
-                } );
+                });
                 //let contador_arbolitos = 0;
                 const registrarArboles = (data: any, callback: Function, index = 0) => {
                   const baby_arbol = data[index];
                   console.log(baby_arbol);
-                  createArbol(baby_arbol).then( (respuestica) => {
-                    if( data.length - 1 === index ) {
+                  createArbol(baby_arbol).then((respuestica) => {
+                    if (data.length - 1 === index) {
                       callback();
                     } else {
-                      registrarArboles( data, callback, index + 1 );
+                      registrarArboles(data, callback, index + 1);
                     }
-                  } );
+                  });
                 }
                 registrarArboles(god_arboles, () => {
-                  const formsIds = options.map( item => item.id );
+                  const formsIds = options.map(item => item.id);
                   deleteFormsStorage(formsIds, () => {
-                    eliminarActividad('POA').then( () => {
-                      eliminarArboles().then( () => {
+                    eliminarActividad('POA').then(() => {
+                      eliminarArboles().then(() => {
                         Navigation.popToRoot(props.componentId);
-                      } )
-                    } )
+                      })
+                    })
                   });
                 });
               }
-            } );
+            });
           }
         } else {
           console.error("NO HAY ARBOLES");
         }
-      } );
+      });
     }
   };
   const mergeData = (og: any, so: any) => {
@@ -161,7 +161,7 @@ const POAScreen = (props: any) => {
     <Container style={styles.containerView}>
       <View style={styles.contentView}>
         <Title title="Información requerida" />
-        { isFetch && <View style={styles.optionItemsView}>
+        {isFetch && <View style={styles.optionItemsView}>
           {procesOptions.map((option: any, index) => {
             return (
               <View key={option.number} style={[styles.optionContainerView]}>
@@ -177,14 +177,14 @@ const POAScreen = (props: any) => {
               </View>
             );
           })}
-        </View> }
+        </View>}
       </View>
       <View style={styles.sidebarView}>
         <Title title="Acciones" />
         <Option
           title={'Enviar POA'}
           subtitle={'Envia todos los datos del POA. Una ves realizado, \nno se podra realizar ningun cambio.'}
-          optionItemView={{flexDirection: 'column', alignItems: 'flex-start'}}
+          optionItemView={{ flexDirection: 'column', alignItems: 'flex-start' }}
           buttonStyle={{ marginLeft: 15, marginTop: 15, backgroundColor: "#999999" }}
           onPress={onPressEnviar}
           actionName={'Generar transacción'}
@@ -192,7 +192,7 @@ const POAScreen = (props: any) => {
         <Option
           title={'Eliminar POA'}
           subtitle={'Elimina los datos registrados del POA hasta el momento. \nAsimismo, se eliminaran todos los datos de los arboles \nregistrados hasta el momento.'}
-          optionItemView={{flexDirection: 'column', alignItems: 'flex-start'}}
+          optionItemView={{ flexDirection: 'column', alignItems: 'flex-start' }}
           buttonStyle={{ marginLeft: 15, marginTop: 15, backgroundColor: "red" }}
           onPress={onPressEliminar}
           actionName={'Eliminar'}
