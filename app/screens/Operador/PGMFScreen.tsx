@@ -5,6 +5,7 @@ import Title from '../../components/Title';
 import Option from '../../components/Option';
 import { Navigation } from 'react-native-navigation';
 import { eliminarPGMF } from '../../services/IFService';
+import ActividadAcciones from '../../components/ActividadAcciones';
 
 const PGMFScreen = (props: any) => {
   const onPressEliminar = () => {
@@ -23,21 +24,8 @@ const PGMFScreen = (props: any) => {
       </View>
       <View style={styles.sidebarView}>
         <Title title="Acciones" />
-        <Option
-          title={'Enviar PGMF'}
-          subtitle={'Envia todos los datos del PGMF. Una ves realizado, \nno se podra realizar ningun cambio.'}
-          optionItemView={{flexDirection: 'column', alignItems: 'flex-start'}}
-          buttonStyle={{ marginLeft: 15, marginTop: 15, backgroundColor: "#999999" }}
-          onPress={onPressEnviar}
-          actionName={'Generar transacción'}
-        />
-        <Option
-          title={'Eliminar PGMF'}
-          subtitle={'Elimina los datos registrados del PGMF hasta el momento. \nAsimismo, se eliminaran todos los datos de los arboles \nregistrados hasta el momento.'}
-          optionItemView={{flexDirection: 'column', alignItems: 'flex-start'}}
-          buttonStyle={{ marginLeft: 15, marginTop: 15, backgroundColor: "red" }}
-          onPress={onPressEliminar}
-          actionName={'Eliminar'}
+        <ActividadAcciones 
+          componentId={props.componentId}
         />
       </View>
     </Container>

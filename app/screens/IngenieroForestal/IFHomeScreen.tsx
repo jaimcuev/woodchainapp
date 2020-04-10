@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Container from '../../components/Container';
 import Option from '../../components/Option';
@@ -6,17 +6,11 @@ import Title from '../../components/Title';
 import { NavigateTo } from '../../services/HelpfulFunctions';
 import { connect } from 'react-redux';
 import { setActividad, destroyActividad } from '../../actions/actividad.actions';
-import { destroyAnexo } from '../../actions/anexo.actions';
+import { destroyAnexo, setAnexo } from '../../actions/anexo.actions';
 
 const IFHomeScreen = (props: any) => {
-  const [empresa, setEmpresa] = useState('');
-  useEffect(() => {
-    setEmpresa(props.empresa || '');
-    return () => {
-    }
-  }, []);
-  const passEmpresa = (empresa: string) => {
-    setEmpresa(empresa);
+  const passEmpresa = (empresaId: string) => {
+    props.storeAnexo({ id: empresaId });
   };
   const onPressPOA = () => {
     if (!props.isActivePOA) props.iniciarPOA();
@@ -37,7 +31,6 @@ const IFHomeScreen = (props: any) => {
     );
   };
   const onPressEliminarEmpresaTaladora = (number: number) => {
-    setEmpresa('');
     props.eliminarAnexo();
   };
   return (
@@ -49,7 +42,7 @@ const IFHomeScreen = (props: any) => {
             number={1}
             title={'Plan Operativo Anual'}
             subtitle={'Subtitulo de la accion'}
-            actionDisabled={!empresa}
+            actionDisabled={!props.empresa}
             onPress={onPressPOA}
             actionName={'Iniciar'}
           />
@@ -62,8 +55,8 @@ const IFHomeScreen = (props: any) => {
             title={'Registrar Empresa Taladora'}
             onPress={onPressRegistrarEmpresaTaladora}
             subtitle={'Subtitulo de la accion'}
-            actionName={empresa ? 'Modificar' : 'Ingresar'}
-            customAction={empresa !== '' && {
+            actionName={props.empresa ? 'Modificar' : 'Ingresar'}
+            customAction={props.empresa && {
               name: 'Eliminar',
               onPress: onPressEliminarEmpresaTaladora,
             }}
@@ -115,6 +108,9 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch(destroyAnexo());
       dispatch(destroyActividad());
     },
+    storeAnexo: (data: any) => {
+      dispatch(setAnexo(data))
+    }
   };
 };
 

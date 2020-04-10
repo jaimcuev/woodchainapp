@@ -27,10 +27,13 @@ import GTFInformacionGeneralScreen from './screens/Operador/GTFInformacionGenera
 import GTFDetalleProductoScreen from './screens/Operador/GTFDetalleProductoScreen';
 import GTFTransportistaScreen from './screens/Operador/GTFTransportistaScreen';
 import ReporteTalaAnexarArbolScreen from './screens/Operador/ReporteTalaAnexarArbolScreen';
+import GenerarTransaccionScreen from './screens/GenerarTransaccionScreen';
 
-export function registerScreens(): void {
+export function registerScreens(): void {  
   Navigation.registerComponent('navigation.InitScreen', () => gestureHandlerRootHOC(ReduxProvider(InitScreen)), () => InitScreen);
   Navigation.registerComponent('navigation.MenuScreen', () => gestureHandlerRootHOC(ReduxProvider(MenuScreen)), () => LoginScreen);
+  Navigation.registerComponent('navigation.OHomeScreen', () => gestureHandlerRootHOC(ReduxProvider(OHomeScreen)), () => LoginScreen);
+  Navigation.registerComponent('navigation.GenerarTransaccionScreen', () => gestureHandlerRootHOC(ReduxProvider(GenerarTransaccionScreen)), () => GenerarTransaccionScreen);
   Navigation.registerComponent('navigation.LoginScreen', () => gestureHandlerRootHOC(ReduxProvider(LoginScreen)), () => LoginScreen);
   Navigation.registerComponent('navigation.IFHomeScreen', () => gestureHandlerRootHOC(ReduxProvider(IFHomeScreen)), () => LoginScreen);
   Navigation.registerComponent('navigation.OHomeScreen', () => gestureHandlerRootHOC(ReduxProvider(OHomeScreen)), () => LoginScreen);

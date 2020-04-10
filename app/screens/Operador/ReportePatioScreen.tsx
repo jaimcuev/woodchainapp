@@ -5,7 +5,7 @@ import { NavigateTo } from '../../services/HelpfulFunctions';
 import Container from '../../components/Container';
 import Title from '../../components/Title';
 import Option from '../../components/Option';
-import { eliminarReporte, getLocalReporte } from '../../services/OService';
+import { getLocalReporte } from '../../services/OService';
 import { Navigation } from 'react-native-navigation';
 
 const ReportePatioScreen = (props: any) => {
@@ -40,11 +40,8 @@ const ReportePatioScreen = (props: any) => {
 
   };
   const onPressEliminar = () => {
-    eliminarReporte().then( status => {
-      if( status ) {
-        Navigation.popToRoot(props.componentId);
-      }
-    } )
+    props.deleteActividad();
+    Navigation.popToRoot(props.componentId);
   };
   return (
     <Container style={styles.containerView}>

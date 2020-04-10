@@ -1,114 +1,63 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {View, StyleSheet} from 'react-native';
-import { useNavigationComponentDidAppear } from 'react-native-navigation-hooks';
 import Container from '../../components/Container';
 import Option from '../../components/Option';
 import Title from '../../components/Title';
 import { NavigateTo } from '../../services/HelpfulFunctions';
-import { getPOA, getReporte, registrarReporte } from '../../services/OService';
+import { setAnexo } from '../../actions/anexo.actions';
+import { setActividad, destroyActividad } from '../../actions/actividad.actions';
+import options from '../../models/OperadorReportes';
 
 const OHomeScreen = (props: any) => {
-  const [POAID, setPOAID] = useState("");
-  const [reporteActivo, setReporteActivo] = useState("");
-  useNavigationComponentDidAppear(e => {
-    getPOA().then( poaId => {
-      if( !poaId ) {
-      } else {
-        setPOAID(poaId);
-        getReporte().then( reporte => {
-          if( reporte ) {
-            setReporteActivo(reporte);
-          } else {
-            setReporteActivo("");
-          }
-        } );
-      }
-    } );
-  }, props.componentId);
-  const onPressReporteTala = () => {
-    if( reporteActivo === "" ) {
-      registrarReporte('ReporteTala').then( status => {
-        if( status ) {
-          NavigateTo(props.componentId, 'ReporteTalaScreen', 'Reporte de Tala', { poaId: POAID });
-        };
-      } )
-    }
-    if( reporteActivo === "ReporteTala" ) {
-      NavigateTo(props.componentId, 'ReporteTalaScreen', 'Reporte de Tala', { poaId: POAID });
-    }
+  const dispatch = useDispatch();
+  const poaId = useSelector((state: any) => state.anexo.data.id);
+  const reporteActivo = useSelector((state: any) => state.actividad.nombre);
+  const storeAnexo = useCallback(
+    (data: any) => dispatch(setAnexo(data)),
+    [dispatch],
+  );
+  const storeActividad = useCallback(
+    (data: string) => dispatch(setActividad(data)),
+    [dispatch],
+  );
+  const deleteActividad = useCallback(
+    () => dispatch(destroyActividad()),
+    [dispatch],
+  );
+  const passPOA = (_poaId: string) => {
+    storeAnexo({ id: _poaId });
   };
-  const onPressReporteArrastre = () => {
-    if( reporteActivo === "" ) {
-      registrarReporte('ReporteArrastre').then( status => {
-        if( status ) {
-          NavigateTo(props.componentId, 'ReporteArrastreScreen', 'Reporte de Arrastre');
-        };
-      } );
-    }
-    if( reporteActivo === "ReporteArrastre" ) {
-      NavigateTo(props.componentId, 'ReporteArrastreScreen', 'Reporte de Arrastre');
-    }
-  };
-  const onPressReportePatio = () => {
-    if( reporteActivo === "" ) {
-      registrarReporte('ReportePatio').then( status => {
-        if( status ) {
-          NavigateTo(props.componentId, 'ReportePatioScreen', 'Reporte de Patio');
-        };
-      } );
-    }
-    if( reporteActivo === "ReportePatio" ) {
-      NavigateTo(props.componentId, 'ReportePatioScreen', 'Reporte de Patio');
-    }
-  };
+  const onPressReporte = (id: string, screen: string, title: string) => {
+    if( !reporteActivo ) storeActividad(id);
+    NavigateTo(props.componentId, screen, title, { 
+      poaId: poaId,
+      deleteActividad: deleteActividad
+    });
+  }
   const onPressRegistrarPOA = () => {
-    NavigateTo(props.componentId, 'RegistrarPOAScreen', 'Registrar POA');
-  };
-  const onPressGTF = () => {
-    NavigateTo(props.componentId, 'GTFScreen', 'Guia de Transporte Forestal');
+    NavigateTo(props.componentId, 'RegistrarPOAScreen', 'Registrar POA', {
+      passPOA: passPOA
+    });
   };
   return (
     <Container style={styles.containerView}>
       <View style={styles.optionsView}>
         <Title title="Reportes" />
         <View style={styles.optionItemsView}>
-          <Option
-            number={2}
-            title={'Plan general de manejo forestal'}
-            subtitle={'Subtitulo de la accion'}
-            actionName={'Iniciar'}
-          />
-          <Option
-            number={1}
-            title={'Reporte de Tala'}
-            subtitle={'Subtitulo de la accion'}
-            onPress={onPressReporteTala}
-            actionDisabled={ (POAID === "" || reporteActivo !== "ReporteTala") && reporteActivo !== "" }
-            actionName={reporteActivo === "ReporteTala" ? 'Continuar' : 'Iniciar'}
-          />
-          <Option
-            number={2}
-            title={'Reporte de Arrastre'}
-            subtitle={'Subtitulo de la accion'}
-            onPress={onPressReporteArrastre}
-            actionDisabled={ (POAID === "" || reporteActivo !== "ReporteArrastre") && reporteActivo !== "" }
-            actionName={reporteActivo === "ReporteArrastre" ? 'Continuar' : 'Iniciar'}
-          />
-          <Option
-            number={3}
-            title={'Reporte de Patio'}
-            subtitle={'Subtitulo de la accion'}
-            onPress={onPressReportePatio}
-            actionDisabled={ (POAID === "" || reporteActivo !== "ReportePatio") && reporteActivo !== "" }
-            actionName={reporteActivo === "ReportePatio" ? 'Continuar' : 'Iniciar'}
-          />
-          <Option
-            number={4}
-            title={'Guia de Transporte Forestal'}
-            subtitle={'Subtitulo de la accion'}
-            onPress={onPressGTF}
-            actionName={'Iniciar'}
-          />
+          {options.map((option: any, index) => {
+            return (
+              <Option
+                key={option.number}
+                number={option.number}
+                title={option.title}
+                onPress={() => onPressReporte(option.id, option.screen, option.title)}
+                subtitle={option.subtitle}
+                actionDisabled={ (poaId === "" || reporteActivo !== option.id) && reporteActivo !== "" }
+                actionName={reporteActivo === option.id ? 'Continuar' : 'Iniciar'}
+              />
+            );
+          })}
         </View>
       </View>
       <View style={styles.badgesView}>
@@ -119,7 +68,7 @@ const OHomeScreen = (props: any) => {
             title={'Registrar POA'}
             subtitle={'Subtitulo de la accion'}
             onPress={onPressRegistrarPOA}
-            actionName={ POAID === "" ? 'Ingresar' : 'Modificar' }
+            actionName={ !poaId ? 'Ingresar' : 'Modificar' }
           />
         </View>
       </View>

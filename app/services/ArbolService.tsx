@@ -21,11 +21,11 @@ export const createArbol = async (data: string) => {
 
 export const getArbolesPOA = async (poaId: string) => {
   return fetch(`${environment.apiURL}/arbol/poa/${poaId}`)
-    .then(res => res.json())
-    .catch(() => {
-      return Respuesta(false, 'Error al conectarse con el servidor.');
-    })
-    .then(async response => {
-      return Respuesta(true, 'Se ha generado la transacción de manera exitosa.', response);
-    });
+  .then(res => res.json())
+  .catch(() => {
+    return Respuesta(false, 'Error al conectarse con el servidor.');
+  })
+  .then(async response => {
+    return Respuesta(true, 'Se ha generado la transacción de manera exitosa.', response);
+  });
 };

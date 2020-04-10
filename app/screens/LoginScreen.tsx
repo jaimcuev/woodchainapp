@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import { navigateIngenieroForestal, navigateOperador } from '../screens';
 import { Login } from '../services/AuthService';
@@ -9,28 +9,41 @@ import { setUsuario } from '../actions/usuario.actions';
 import { error, loading } from '../actions/alerta.actions';
 
 const LoginScreen = (props: any) => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const errorAlerta = useCallback(
+    (message: string) => dispatch(error(message)),
+    [dispatch],
+  );
+  const loadingAlerta = useCallback(
+    (message: string) => dispatch(loading(message)),
+    [dispatch],
+  );
+  const storeUsuario = useCallback(
+    (data: any) => dispatch(setUsuario(data)),
+    [dispatch],
+  );
   const onPressLogin = () => {
     if( username != "" && password != "" ) {
-      props.loadingAlerta("Evaluando transacción en la red.");
+      loadingAlerta("Evaluando transacción en la red.");
       Login(username, password).then( respuesta => {
         if( respuesta.status ) {
           if( respuesta.data && respuesta.data.rol == "IngenieroForestal" ) {
-            props.storeUsuario(respuesta.data);
+            storeUsuario(respuesta.data);
             navigateIngenieroForestal();
           } else if( respuesta.data && respuesta.data.rol == "Operador" ) {
-            props.storeUsuario(respuesta.data);
+            storeUsuario(respuesta.data);
             navigateOperador();
           } else {
-            props.errorAlerta("El rol asignado a tu cuenta no tiene permisos para acceder a la aplicación.");
+            errorAlerta("El rol asignado a tu cuenta no tiene permisos para acceder a la aplicación.");
           }
         } else {
-          props.errorAlerta(respuesta.message);
+          errorAlerta(respuesta.message);
         }
       } );
     } else {
-      props.errorAlerta("Debes completar los campos de usuario y contraseña para poder ingresar.");
+      errorAlerta("Debes completar los campos de usuario y contraseña para poder ingresar.");
     };
   };
   return (
@@ -92,22 +105,4 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = (state: any) => {
-  return {}
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    errorAlerta: (message: string) => {
-      dispatch(error(message))
-    },
-    loadingAlerta: (message: string) => {
-      dispatch(loading(message))
-    },
-    storeUsuario: (data: any) => {
-      dispatch(setUsuario(data))
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+export default LoginScreen;

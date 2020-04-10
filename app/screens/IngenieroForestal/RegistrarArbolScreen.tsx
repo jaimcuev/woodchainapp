@@ -14,9 +14,7 @@ const RegistrarArbolScreen = (props: any) => {
   const [longitud, setLongitud] = useState(0);
   const [steps] = useState(RegistrarArbol);
   const submitForm = (data: any, localData: any) => {
-    console.warn("=>", latitud, longitud);
     if( latitud && longitud ) {
-      /*
       getArboles().then( arboles => {
         const existArbolLatlong = arboles ? arboles.find( (ar: any) => ar.ubicacion_longitud.value === longitud && ar.ubicacion_latitud.value === latitud ) : false;
         if( existArbolLatlong ) {
@@ -31,7 +29,6 @@ const RegistrarArbolScreen = (props: any) => {
           } );
         }
       } );
-      */
     }
   };
   const setLocation = (lat: number, lon: number) => {

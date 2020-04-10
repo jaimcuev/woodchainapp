@@ -5,7 +5,6 @@ import { Navigation } from 'react-native-navigation';
 import Container from '../../components/Container';
 import { getEmpresasTaladoras } from '../../services/UsuarioService';
 import Option from '../../components/Option';
-import { setAnexo } from '../../actions/anexo.actions';
 import { destoryAlerta, loading, error } from '../../actions/alerta.actions';
 
 const RegistrarEmpresaTaladoraScreen = (props: any) => {
@@ -25,7 +24,6 @@ const RegistrarEmpresaTaladoraScreen = (props: any) => {
   }, []);
   const onPressRegistrarEmpresaTaladora = (empresa: any) => {
     // TODO: Se debe eliminar toda la data previa
-    props.storeAnexo({ id: empresa.id });
     props.passEmpresa(empresa.id);
     Navigation.popToRoot(props.componentId);
   };
@@ -57,9 +55,6 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    storeAnexo: (data: any) => {
-      dispatch(setAnexo(data))
-    },
     errorAlerta: (message: string) => {
       dispatch(error(message))
     },

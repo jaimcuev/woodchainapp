@@ -5,7 +5,7 @@ import { NavigateTo } from '../../services/HelpfulFunctions';
 import Container from '../../components/Container';
 import Title from '../../components/Title';
 import Option from '../../components/Option';
-import { eliminarReporte, getLocalReporte } from '../../services/OService';
+import { getLocalReporte } from '../../services/OService';
 import { Navigation } from 'react-native-navigation';
 
 const GTFScreen = (props: any) => {

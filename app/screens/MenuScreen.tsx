@@ -6,6 +6,9 @@ import InternetStatus from '../components/InternetStatus';
 import { navigateGuest } from '../screens';
 import { connect } from 'react-redux';
 import { destroyUsuario } from '../actions/usuario.actions';
+import { destroyActividad } from '../actions/actividad.actions';
+import { destoryAlerta } from '../actions/alerta.actions';
+import { destroyAnexo } from '../actions/anexo.actions';
 
 const MenuScreen = (props: any) => {
   const onPressLogOut = () => {
@@ -92,7 +95,10 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     logoutUsuario: () => {
-      dispatch(destroyUsuario())
+      dispatch(destroyUsuario());
+      dispatch(destroyActividad());
+      dispatch(destoryAlerta());
+      dispatch(destroyAnexo());
     }
   }
 }

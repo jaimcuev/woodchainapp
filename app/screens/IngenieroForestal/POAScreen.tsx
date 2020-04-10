@@ -47,11 +47,9 @@ const POAScreen = (props: any) => {
       screen: 'POAPlanSilviculturalScreen'
     },
   ];
-  const [isFetch, setIsFetch] = useState(false);
   const [procesOptions, setProcesOptions] = useState(options);
 
   useNavigationComponentDidAppear(e => {
-    setIsFetch(true);
     const formsIds = options.map(item => item.id);
     getFormsStorage(formsIds, (result: any) => {
       const data = procesOptions.map((item: any) => {
@@ -161,7 +159,7 @@ const POAScreen = (props: any) => {
     <Container style={styles.containerView}>
       <View style={styles.contentView}>
         <Title title="Información requerida" />
-        {isFetch && <View style={styles.optionItemsView}>
+        <View style={styles.optionItemsView}>
           {procesOptions.map((option: any, index) => {
             return (
               <View key={option.number} style={[styles.optionContainerView]}>
@@ -177,7 +175,7 @@ const POAScreen = (props: any) => {
               </View>
             );
           })}
-        </View>}
+        </View>
       </View>
       <View style={styles.sidebarView}>
         <Title title="Acciones" />
@@ -239,7 +237,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state: any) => {
   return {
     usuario: state.usuario.data,
-    empresa: state.anexo.id
+    empresa: state.anexo.data.id
   }
 }
 

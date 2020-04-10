@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Container from '../../components/Container';
 import Form from '../../components/Form';
 import { findByParentUsuario } from '../../services/POAService';
-import { registrarPOA } from '../../services/OService';
 
 const ReportePatioScreen = (props: any) => {
   const steps = [
@@ -25,11 +24,8 @@ const ReportePatioScreen = (props: any) => {
       const parentUsuario = props.usuario.parentUsuario;
       findByParentUsuario(myPoaId, parentUsuario).then( (result: any) => {
         if( result.data.poaId ) {
-          registrarPOA( result.data.poaId ).then( status => {
-            if( status ) {
-              Navigation.popToRoot(props.componentId);
-            }
-          } );
+          props.passPOA( result.data.poaId );
+          Navigation.popToRoot(props.componentId);
         }
       } );
     }
