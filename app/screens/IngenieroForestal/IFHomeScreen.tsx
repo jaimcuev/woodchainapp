@@ -52,7 +52,7 @@ const IFHomeScreen = (props: any) => {
           <Option
             number={1}
             actionDisabled={false}
-            title={'Registrar Empresa Taladora'}
+            title={'Anexar Empresa Taladora'}
             onPress={onPressRegistrarEmpresaTaladora}
             subtitle={'Subtitulo de la accion'}
             actionName={props.empresa ? 'Modificar' : 'Ingresar'}

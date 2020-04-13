@@ -1,70 +1,87 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { StyleSheet } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { StyleSheet, View } from 'react-native';
 import { Navigation } from 'react-native-navigation';
+import { FlatList } from 'react-native-gesture-handler';
 import Container from '../../components/Container';
 import { getEmpresasTaladoras } from '../../services/UsuarioService';
 import Option from '../../components/Option';
 import { destoryAlerta, loading, error } from '../../actions/alerta.actions';
+import MyTextInput from '../../components/MyTextInput';
 
 const RegistrarEmpresaTaladoraScreen = (props: any) => {
+  const dispatch = useDispatch();
+  const [search, setSearch] = useState('');
   const [empresas, setEmpresas] = useState([]);
+  const [visibleEmpresas, setVisibleEmpresas] = useState([]);
+  const errorAlerta = useCallback(
+    (message: string) => dispatch(error(message)),
+    [dispatch],
+  );
+  const loadingAlerta = useCallback(
+    (message: string) => dispatch(loading(message)),
+    [dispatch],
+  );
+  const closeAlerta = useCallback(
+    () => dispatch(destoryAlerta()),
+    [dispatch],
+  );
   useEffect(() => {
-    props.loadingAlerta("Evaluando transacción en la red.");
+    loadingAlerta("Evaluando transacción en la red.");
     getEmpresasTaladoras().then((result: any) => {
       if (result.status) {
-        props.closeAlerta();
+        closeAlerta();
         setEmpresas(result.data);
+        setVisibleEmpresas(result.data);
       } else {
-        props.errorAlerta(result.message);
+        errorAlerta(result.message);
       }
     });
-    return () => {
-    }
   }, []);
   const onPressRegistrarEmpresaTaladora = (empresa: any) => {
     // TODO: Se debe eliminar toda la data previa
     props.passEmpresa(empresa.id);
     Navigation.popToRoot(props.componentId);
   };
+  const onSearch = (id: string, text: string) => {
+    setSearch(text);
+    const searchResults = empresas.filter( ( empresa: any ) => empresa.id.includes(text) );
+    setVisibleEmpresas(searchResults);
+  };
   return (
-    <Container style={styles.containerView}>
-      {empresas && empresas.length > 0 && empresas.map((empresa: any, index: number) => {
-        return <Option
-          key={empresa.id}
-          number={index + 1}
-          title={`${empresa.id}: ${empresa.nombre} ${empresa.apellidos}`}
-          subtitle={`Documento de identidad: ${empresa.dni} - Dirección: ${empresa.direccion}`}
-          onPress={() => onPressRegistrarEmpresaTaladora(empresa)}
-          actionName={'Anexar'}
+    <Container>
+      <View style={styles.searchView}>
+        <MyTextInput 
+          placeholder={'Código de la empresa...'} 
+          value={search} 
+          onChange={onSearch} />
+      </View>
+      <View style={styles.contentView}>
+        <FlatList
+          data={visibleEmpresas}
+          renderItem={({ item }) => (
+            <Option
+              title={`${item.id}: ${item.nombre} ${item.apellidos}`}
+              subtitle={`Documento de identidad: ${item.dni} - Dirección: ${item.direccion}`}
+              onPress={() => onPressRegistrarEmpresaTaladora(item)}
+              actionName={'Anexar'}
+            />
+          )}
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(field: any) => field.id}
         />
-      })}
+      </View>
     </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  containerView: {
-    padding: 30
+  contentView: {
+    paddingHorizontal: 15
+  },
+  searchView: {
+    paddingHorizontal: 15
   }
 });
 
-const mapStateToProps = (state: any) => {
-  return {}
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    errorAlerta: (message: string) => {
-      dispatch(error(message))
-    },
-    loadingAlerta: (message: string) => {
-      dispatch(loading(message))
-    },
-    closeAlerta: () => {
-      dispatch(destoryAlerta())
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(RegistrarEmpresaTaladoraScreen);
+export default RegistrarEmpresaTaladoraScreen;

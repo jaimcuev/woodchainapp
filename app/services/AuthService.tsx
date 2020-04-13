@@ -1,10 +1,12 @@
 import { Respuesta } from './HelpfulFunctions';
 import environment from '../environments';
 
+const URL = `${environment.apiURL}/usuario`;
+
 export const Login = async (email: string, password: string) => {
-  return fetch(`${environment.apiURL}/usuario/login`, {
+  return fetch(`${URL}/login`, {
     method: 'POST',
-    body: JSON.stringify({email: email, password: password}),
+    body: JSON.stringify({ email, password }),
     headers: {
       'Content-Type': 'application/json',
     },

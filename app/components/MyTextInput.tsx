@@ -12,7 +12,8 @@ const MyTextInput = (props: any) => {
         onChangeText={(text: string) =>
           props.onChange && props.onChange(props.id, text, 'MyTextInput')
         }
-        placeholder={props.placeholder ? props.placeholder : props.name}
+        placeholder={ props.placeholder || props.name }
+        secureTextEntry={ props.secureTextEntry || false }
       />
     </View>
   );

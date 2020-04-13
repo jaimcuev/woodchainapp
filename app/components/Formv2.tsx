@@ -118,6 +118,17 @@ const Formv2 = (props: any) => {
       console.warn(`No se ha establecido el formId para el formulario.`);
     }
   };
+
+  const onPressTerminar = () => {
+    if( props.formId ) {
+      const fields = props.steps[currentStep].fields;
+      fields.forEach( (field: any) => {
+        if( field.children ) {
+        } else {
+        }
+      });
+    }
+  };
   
   const renderComponent = (field: any) => {
     switch (field.component) {
@@ -178,7 +189,7 @@ const Formv2 = (props: any) => {
                 <MyButton
                   onPress={onPressGuardar}
                   style={[styles.actionView, { backgroundColor: "#999999" }]}
-                  name="Continuar Luego"
+                  name="Guardar"
                 />
                 {currentStep !== 0 && (
                   <MyButton
@@ -196,9 +207,9 @@ const Formv2 = (props: any) => {
                 )}
                 {currentStep === props.steps.length - 1 && (
                   <MyButton
-                    onPress={onPressGuardar}
+                    onPress={onPressTerminar}
                     style={styles.actionView}
-                    name="Guardar"
+                    name="Terminar"
                   />
                 )}
               </View>

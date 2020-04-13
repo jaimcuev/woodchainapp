@@ -134,7 +134,7 @@ const Formv3 = (props: any) => {
                 <MyButton
                   onPress={onPressGuardar}
                   style={[styles.actionView, { backgroundColor: "#999999" }]}
-                  name="Continuar Luego"
+                  name="Guardar"
                 />
                 {currentStep !== 0 && (
                   <MyButton
@@ -154,7 +154,7 @@ const Formv3 = (props: any) => {
                   <MyButton
                     onPress={onPressGuardar}
                     style={styles.actionView}
-                    name="Guardar"
+                    name="Terminar"
                   />
                 )}
               </View>

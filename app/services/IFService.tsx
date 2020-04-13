@@ -12,15 +12,6 @@ export const eliminarActividad = async(actividad: string) => {
   }
 };
 
-export const getActividad = async() => {
-  try {
-    const value = await AsyncStorage.getItem('@actividad');
-    if (value !== null) return value;
-    return false;
-  } catch (e) {
-    return false;
-  }
-};
 
 export const checkExistActividad = async(actividad: string) => {
   try {
@@ -40,38 +31,6 @@ const registrarActividad = async(actividad: string) => {
     return false;
   }
 }
-
-export const getPOA = async() => {
-  try {
-    const value = await AsyncStorage.getItem(`@POA`);
-    if (value !== null) return JSON.parse(value);
-    return false;
-  } catch (e) {
-    return false;
-  }
-}
-
-export const getLocalPOA = async() => {
-  try {
-    const value = await AsyncStorage.getItem(`@LOCAL_POA`);
-    if (value !== null) return JSON.parse(value);
-    return false;
-  } catch (e) {
-    return false;
-  }
-}
-
-export const eliminarPOA = async() => {
-  try {
-    const isActive = checkExistActividad('POA');
-    if( isActive ) {
-      await AsyncStorage.removeItem('@actividad');
-    }
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
 
 export const registrarPOA = async(name: string, data: any, localData: any) => {
   try {
@@ -93,19 +52,6 @@ export const registrarPOA = async(name: string, data: any, localData: any) => {
   }
 }
 
-export const iniciarPOA = async () => {
-  const existPGMF = await checkExistActividad('PGMF');
-  if (!existPGMF) {
-    const existPOA = await checkExistActividad('POA');
-    if( !existPOA ) {
-      await registrarActividad('POA');
-    }
-    return true;
-  } else {
-    return false;
-  }
-}
-
 export const eliminarPGMF = async() => {
   try {
     const isActive = checkExistActividad('PGMF');
@@ -117,19 +63,6 @@ export const eliminarPGMF = async() => {
     return false;
   }
 };
-
-export const iniciarPGMF = async () => {
-  const existPOA = await checkExistActividad('POA');
-  if (!existPOA) {
-    const existPGMF = await checkExistActividad('PGMF');
-    if( !existPGMF ) {
-      await registrarActividad('PGMF');
-    }
-    return true;
-  } else {
-    return false;
-  }
-}
 
 export const getArboles = async() => {
   try {

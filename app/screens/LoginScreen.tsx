@@ -59,6 +59,7 @@ const LoginScreen = (props: any) => {
         <MyTextInput 
           name="Contraseña" 
           value={password} 
+          secureTextEntry={true}
           onChange={ (id: string, text: string) => setPassword(text) }
         />
         <TouchableOpacity onPress={onPressLogin} style={styles.loginButton}>

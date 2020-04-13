@@ -1,38 +1,52 @@
-import React, { useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, PermissionsAndroid } from 'react-native';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, PermissionsAndroid, Text } from 'react-native';
+import { useSelector } from 'react-redux';
 import { navigateGuest, navigateIngenieroForestal, navigateOperador } from '../screens';
 import Container from '../components/Container';
 
-const InitScreen = (props: any) => {
+const InitScreen = () => {
+  const usuario = useSelector((state: any) => state.usuario.data);
+  const [isFetch, setIsFetch] = useState(false);
   const requestLocationPermission = async () => {
     return PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION
     ]).then( granted => {
+      if( 
+        granted["android.permission.ACCESS_COARSE_LOCATION"] === 'denied' || 
+        granted["android.permission.ACCESS_FINE_LOCATION"] === 'denied' 
+      ) {
+        return false;
+      }
       return true;
     } ).catch( error => {
       return false;
     } );
   };
   useEffect(() => {
-    requestLocationPermission().then(access => {
-      if ( access && props.usuario ) {
-        if ( props.usuario.rol == 'IngenieroForestal' ) {
-          navigateIngenieroForestal();
-        } else if ( props.usuario.rol == 'Operador' ) {
-          navigateOperador();
-        } else {
-          navigateGuest();
+    requestLocationPermission().then( (access: boolean) => {
+      setIsFetch(true);
+      if ( access && usuario ) {
+        switch (usuario.rol) {
+          case 'IngenieroForestal':
+            navigateIngenieroForestal();
+            break;
+          case 'Operador':
+            navigateOperador();
+            break;
+          default:
+            navigateGuest();
+            break;
         }
-      } else {
-        navigateGuest();
       }
     });
   }, []);
   return (
     <Container style={styles.containerView}>
-      <ActivityIndicator size="large" color="#02111B" />
+      { isFetch ? (
+        <Text>Se ha producido un error al obtener los permisos requeridos para la aplicación. 
+          Porfavor, vuelva a abrir la aplicación.</Text>
+      ) : <ActivityIndicator  size="large" color="#02111B" /> }
     </Container>
   );
 };
@@ -44,10 +58,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state: any) => {
-  return {
-    usuario: state.usuario.data
-  }
-}
-
-export default connect(mapStateToProps)(InitScreen);
+export default InitScreen;
