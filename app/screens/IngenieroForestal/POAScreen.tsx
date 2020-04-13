@@ -66,9 +66,11 @@ const POAScreen = (props: any) => {
   const onPressEliminar = () => {
     const formsIds = options.map(item => item.id);
     deleteFormsStorage(formsIds, () => {
-      eliminarActividad('POA').then(() => {
-        Navigation.popToRoot(props.componentId);
-      })
+      eliminarArboles().then( () => {
+        eliminarActividad('POA').then(() => {
+          Navigation.popToRoot(props.componentId);
+        });
+      } );
     });
   };
   const onPressEnviar = () => {
@@ -104,6 +106,7 @@ const POAScreen = (props: any) => {
           });
           const usuarioId = props.usuario.id;
           if (usuarioId) {
+            blockchain_result['POAInformacionGeneral']['ingenieroForestal'] = blockchain_result['POAInformacionGeneral']['ingenieroForestal'] || {};
             blockchain_result['POAInformacionGeneral']['ingenieroForestal']['usuarioId'] = usuarioId;
             blockchain_result['parentUsuario'] = props.empresa;
             console.warn(blockchain_result);

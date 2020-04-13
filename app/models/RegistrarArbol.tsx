@@ -7,6 +7,14 @@ export default [
           id: 'informacionGeneral_especie',
           name: 'Especie',
         },
+        {
+          id: 'informacionGeneral_minimoTrozas',
+          name: 'Minimo de trozas',
+        },
+        {
+          id: 'informacionGeneral_maximoTrozas',
+          name: 'Maximo de trozas',
+        },
       ],
     },
     {

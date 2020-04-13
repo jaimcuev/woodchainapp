@@ -31,3 +31,20 @@ export const getTroza = async () => {
       return Respuesta(true, 'Se ha generado la transacción de manera exitosa.', response);
     });
 };
+
+export const anexarReportePatio = async (trozaId: string, reporteId: string) => {
+  return fetch(`${environment.apiURL}/troza/${trozaId}/anexar/reporte-patio`, {
+    method: 'PUT',
+    body: JSON.stringify({ reporteId }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(res => res.json())
+  .catch(() => {
+    return Respuesta(false, 'Error al conectarse con el servidor.');
+  })
+  .then(async response => {
+    return Respuesta(true, 'Se ha generado la transacción de manera exitosa.', response);
+  });
+};

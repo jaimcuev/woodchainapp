@@ -1,4 +1,4 @@
-import { SET_ALERTA, DESTROY_ALERTA } from '../actions/alerta.actions';
+import { SET_ALERTA, DESTROY_ALERTA, SET_MESSAGE_ALERTA } from '../actions/alerta.actions';
 
 const initialState =  { status: '', message: '', options: [], isVisible: false, haveClose: false };
 
@@ -12,6 +12,10 @@ const alertaReducer = (state = initialState, action: any) => {
         isVisible: true,
         haveClose: action.haveClose
       };
+    case SET_MESSAGE_ALERTA:
+      return Object.assign({}, state, {
+        message: action.message
+      })
     case DESTROY_ALERTA:
       return initialState;
     default:

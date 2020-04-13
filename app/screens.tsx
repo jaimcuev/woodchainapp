@@ -28,6 +28,8 @@ import GTFDetalleProductoScreen from './screens/Operador/GTFDetalleProductoScree
 import GTFTransportistaScreen from './screens/Operador/GTFTransportistaScreen';
 import ReporteTalaAnexarArbolScreen from './screens/Operador/ReporteTalaAnexarArbolScreen';
 import GenerarTransaccionScreen from './screens/GenerarTransaccionScreen';
+import ReporteArrastreAnexarArbolScreen from './screens/Operador/ReporteArrastreAnexarArbolScreen';
+import ReportePatioRegistrarTrozaScreen from './screens/Operador/ReportePatioRegistrarTrozaScreen';
 
 export function registerScreens(): void {  
   Navigation.registerComponent('navigation.InitScreen', () => gestureHandlerRootHOC(ReduxProvider(InitScreen)), () => InitScreen);
@@ -55,8 +57,12 @@ export function registerScreens(): void {
   Navigation.registerComponent('navigation.ReporteTalaInformacionScreen', () => gestureHandlerRootHOC(ReduxProvider(ReporteTalaInformacionScreen)), () => ReporteTalaInformacionScreen);
   Navigation.registerComponent('navigation.ReportePatioScreen', () => gestureHandlerRootHOC(ReduxProvider(ReportePatioScreen)), () => ReportePatioScreen);
   Navigation.registerComponent('navigation.ReportePatioInformacionScreen', () => gestureHandlerRootHOC(ReduxProvider(ReportePatioInformacionScreen)), () => ReportePatioInformacionScreen);
+  Navigation.registerComponent('navigation.ReportePatioRegistrarTrozaScreen', () => gestureHandlerRootHOC(ReduxProvider(ReportePatioRegistrarTrozaScreen)), () => ReportePatioRegistrarTrozaScreen);
   Navigation.registerComponent('navigation.ReporteArrastreScreen', () => gestureHandlerRootHOC(ReduxProvider(ReporteArrastreScreen)), () => ReporteArrastreScreen);
   Navigation.registerComponent('navigation.ReporteArrastreInformacionScreen', () => gestureHandlerRootHOC(ReduxProvider(ReporteArrastreInformacionScreen)), () => ReporteArrastreInformacionScreen);
+  Navigation.registerComponent('navigation.ReporteArrastreAnexarArbolScreen', () => gestureHandlerRootHOC(ReduxProvider(ReporteArrastreAnexarArbolScreen)), () => ReporteArrastreAnexarArbolScreen);
+  
+
   // Registrar POA para Reportes
   Navigation.registerComponent('navigation.RegistrarPOAScreen', () => gestureHandlerRootHOC(ReduxProvider(RegistrarPOAScreen)), () => RegistrarPOAScreen);
   // GTF

@@ -72,10 +72,6 @@ export default [
           options: {
             columns: [
               {
-                name: 'Item',
-                id: 'informacionDetallada_item',
-              },
-              {
                 name: 'Especie',
                 id: 'informacionDetallada_especie',
               },
@@ -101,7 +97,7 @@ export default [
               },
               {
                 name: 'VOL m3',
-                id: 'informacionDetallada_VOLm3',
+                id: 'informacionDetallada_VOLm',
               },
               {
                 name: 'Patio',

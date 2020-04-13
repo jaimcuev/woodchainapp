@@ -6,12 +6,10 @@ const anexoReducer = (state = initialState, action: any) => {
   switch(action.type) {
     case SET_ANEXO:
       return {
-        ...state,
         data: action.data
       };
     case DESTROY_ANEXO:
       return {
-        ...state,
         data: {}
       };
     default:

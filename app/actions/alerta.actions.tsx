@@ -1,5 +1,6 @@
 export const SET_ALERTA = 'SET_ALERTA';
 export const DESTROY_ALERTA = 'DESTROY_ALERTA';
+export const SET_MESSAGE_ALERTA = 'SET_MESSAGE_ALERTA';
 
 
 export const loading = (message: string) => {
@@ -30,6 +31,14 @@ export const error = (message: string, haveClose = true, options = []) => {
     options
   }
 }
+
+
+export const setMessage = (message: string) => {
+  return {
+    type: SET_MESSAGE_ALERTA,
+    message
+  }
+};
 
 export const destoryAlerta = () => {
   return {

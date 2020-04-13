@@ -24,12 +24,12 @@ export default [
           name: 'Supervisor',
         },
         {
-          id: 'informacionGeneral_motocierrista',
-          name: 'Motocierrista',
+          id: 'informacionGeneral_motosierrista',
+          name: 'Motosierrista',
         },
         {
-          id: 'informacionGeneral_codigoMotocierra',
-          name: 'Codigo de motocierra',
+          id: 'informacionGeneral_codigoMotosierra',
+          name: 'Codigo de motosierra',
         },
         {
           id: 'informacionGeneral_codigoMaquina',
@@ -61,16 +61,12 @@ export default [
         },
         {
           id: 'informacionGeneral_otros',
-          name: 'oTROS',
+          name: 'Otros',
         },
         {
           id: 'informacionGeneral_tipoExtraccion',
           name: 'Tipo de extracción',
-        },
-        {
-          id: 'informacionGeneral_fecha',
-          name: 'Fecha',
-        },
+        }
       ],
     },
     {
@@ -82,11 +78,8 @@ export default [
           name: 'Información detallada',
           component: 'MyTable',
           options: {
+            max_rows: 1,
             columns: [
-              {
-                name: 'Item',
-                id: 'informacionDetallada_item',
-              },
               {
                 name: 'Codigo/Carga',
                 id: 'informacionDetallada_codigo',

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import Container from '../components/Container';
 import { useSelector, useDispatch } from 'react-redux';
 import { loading, error } from '../actions/alerta.actions';
-import { LocalToBlockchain } from '../services/HelpfulFunctions';
+import { LocalToBlockchain, mergeData } from '../services/HelpfulFunctions';
 
 const GenerarTransaccionScreen = (props: any) => {
   const dispatch = useDispatch();
@@ -23,14 +23,13 @@ const GenerarTransaccionScreen = (props: any) => {
       const metadata = dataActividad[mydata];
       const subkeys = Object.keys(metadata);
       result[mydata] = {};
-
       if( exclude.includes(mydata) ) {
         result[mydata] = metadata;
       } else {
         subkeys.forEach( subkey => {
           const submetadata = metadata[subkey];
           const localData = LocalToBlockchain(submetadata, subkey);
-          result[mydata] = localData;
+          result[mydata] = mergeData(result[mydata], localData);
         } );
       }
     });

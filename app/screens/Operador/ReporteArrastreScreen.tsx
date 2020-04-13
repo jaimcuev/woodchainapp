@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { NavigateTo } from '../../services/HelpfulFunctions';
 import Container from '../../components/Container';
@@ -6,8 +6,61 @@ import Title from '../../components/Title';
 import Option from '../../components/Option';
 import options from '../../models/ReporteArrastre';
 import ActividadAcciones from '../../components/ActividadAcciones';
+import { createReporte } from '../../services/ReporteService';
+import { anexarReporteArrastre } from '../../services/ArbolService';
+import { useDispatch } from 'react-redux';
+import { error, success } from '../../actions/alerta.actions';
+import { Navigation } from 'react-native-navigation';
 
 const ReporteArrastreScreen = (props: any) => {
+  const dispatch = useDispatch();
+  const errorAlerta = useCallback(
+    (message: string, haveClose: boolean) => dispatch(error(message, haveClose)),
+    [dispatch],
+  );
+  const successAlerta = useCallback(
+    (message: string, haveClose: boolean, options: any) => dispatch(success(message, haveClose, options)),
+    [dispatch],
+  );
+  const onPressAnexarArbol = () => {
+    NavigateTo(props.componentId, 'ReporteArrastreAnexarArbolScreen', 'Anexar Arbol', { 
+      poaId: props.poaId 
+    });
+  };
+  const onPressEnviar = (anexo: string, data: any) => {
+    if( data && data.arboles && anexo ) {
+      let dataSubmit = data;
+      let arboles = dataSubmit.arboles;
+      delete dataSubmit.arboles;
+      dataSubmit.tipoReporte = 'ReporteArrastre';
+      dataSubmit.poaId = anexo;
+      createReporte(dataSubmit).then( (response) => {
+        const reporteId = response.data;
+        const anexarArboles = (data: any, callback: Function, index = 0) => {
+          const arbol = data[index];
+          anexarReporteArrastre(arbol.id, reporteId).then( (resultado) => {
+            if( resultado.data.message ) {
+            } else {
+            }
+            if (data.length - 1 === index) {
+              callback();
+            } else {
+              anexarArboles(data, callback, index + 1);
+            }
+          } );
+        }
+        anexarArboles( arboles, () => {
+          props.deleteActividad();
+          successAlerta('Transacción enviada correctamente.', false, [
+            {
+              name: 'Volver al inicio',
+              onPress: () => Navigation.popToRoot(props.componentId)
+            }
+          ]);
+        } );
+      } );
+    }
+  };
   return (
     <Container style={styles.containerView}>
       <View style={styles.contentView}>
@@ -29,6 +82,18 @@ const ReporteArrastreScreen = (props: any) => {
             );
           }) }
         </View>
+        <Title title="Accesos Directos" />
+        <View style={styles.optionItemsView}>
+          <View style={[styles.optionContainerView]}>
+            <Option
+              number={1}
+              title={'Anexar Arbol'}
+              subtitle={'Subtitulo de la accion'}
+              onPress={onPressAnexarArbol}
+              actionName={'Ingresar'}
+            />
+          </View>
+        </View>
       </View>
       <View style={styles.sidebarView}>
         <Title title="Acciones" />
@@ -36,6 +101,8 @@ const ReporteArrastreScreen = (props: any) => {
           name={`Reporte de Arrastre`}
           componentId={props.componentId} 
           deleteActividad={props.deleteActividad}
+          onPressEnviar={onPressEnviar}
+          excludeEstructurar={['arboles']}
         />
       </View>
     </Container>

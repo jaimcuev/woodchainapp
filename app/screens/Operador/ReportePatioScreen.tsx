@@ -1,14 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useNavigationComponentDidAppear } from 'react-native-navigation-hooks';
 import { NavigateTo } from '../../services/HelpfulFunctions';
 import Container from '../../components/Container';
 import Title from '../../components/Title';
 import Option from '../../components/Option';
-import { getLocalReporte } from '../../services/OService';
 import { Navigation } from 'react-native-navigation';
+import ActividadAcciones from '../../components/ActividadAcciones';
+import { createReporte } from '../../services/ReporteService';
+import { anexarReportePatio } from '../../services/TrozaService';
+import { useDispatch } from 'react-redux';
+import { error, success } from '../../actions/alerta.actions';
 
 const ReportePatioScreen = (props: any) => {
+  const dispatch = useDispatch();
+  const errorAlerta = useCallback(
+    (message: string, haveClose: boolean) => dispatch(error(message, haveClose)),
+    [dispatch],
+  );
+  const successAlerta = useCallback(
+    (message: string, haveClose: boolean, options: any) => dispatch(success(message, haveClose, options)),
+    [dispatch],
+  );
+
   const options = [
     {
       number: 1,
@@ -19,35 +32,51 @@ const ReportePatioScreen = (props: any) => {
       screen: 'ReportePatioInformacionScreen'
     }
   ];
-  const [isFetch, setIsFetch] = useState(false);
   const [procesOptions, setProcesOptions] = useState(options);
-  useNavigationComponentDidAppear(e => {
-    getLocalReporte().then( result => {
-      setIsFetch(true);
-      if( result ) {
-        const data = procesOptions.map( (item: any) => {
-          item.data = result[item.id] || {};
-          item.actionName = result[item.id] ? 'Continuar' : 'Iniciar';
-          return item;
-        } )
-        setProcesOptions(data);
-      }
-    } );
-    return () => {
-    }
-  }, props.componentId);
-  const onPressEnviar = () => {
-
+  const onPressRegistrarTroza = () => {
+    NavigateTo(props.componentId, 'ReportePatioRegistrarTrozaScreen', 'Registrar Trozas', { 
+      poaId: props.poaId 
+    });
   };
-  const onPressEliminar = () => {
-    props.deleteActividad();
-    Navigation.popToRoot(props.componentId);
+  const onPressEnviar = (anexo: string, data: any) => {
+    if( data && data.trozas && anexo ) {
+      let dataSubmit = data;
+      let trozas = dataSubmit.trozas;
+      delete dataSubmit.trozas;
+      dataSubmit.tipoReporte = 'ReportePatio';
+      dataSubmit.poaId = anexo;
+      createReporte(dataSubmit).then( (response) => {
+        const reporteId = response.data;
+        const anexarTrozas = (data: any, callback: Function, index = 0) => {
+          const troza = data[index];
+          anexarReportePatio(troza.id, reporteId).then( (resultado) => {
+            if( resultado.data.message ) {
+            } else {
+            }
+            if (data.length - 1 === index) {
+              callback();
+            } else {
+              anexarTrozas(data, callback, index + 1);
+            }
+          } );
+        }
+        anexarTrozas( trozas, () => {
+          props.deleteActividad();
+          successAlerta('Transacción enviada correctamente.', false, [
+            {
+              name: 'Volver al inicio',
+              onPress: () => Navigation.popToRoot(props.componentId)
+            }
+          ]);
+        } );
+      } );
+    }
   };
   return (
     <Container style={styles.containerView}>
       <View style={styles.contentView}>
         <Title title="Información requerida" />
-        { isFetch && <View style={styles.optionItemsView}>
+        <View style={styles.optionItemsView}>
           {procesOptions.map((option: any, index) => {
             return (
               <View key={option.number} style={[styles.optionContainerView]}>
@@ -63,28 +92,29 @@ const ReportePatioScreen = (props: any) => {
               </View>
             );
           })}
-        </View> }
+        </View>
+        <Title title="Accesos Directos" />
+        <View style={styles.optionItemsView}>
+          <View style={[styles.optionContainerView]}>
+            <Option
+              number={1}
+              title={'Registrar Troza'}
+              subtitle={'Subtitulo de la accion'}
+              onPress={onPressRegistrarTroza}
+              actionName={'Ingresar'}
+            />
+          </View>
+        </View>
       </View>
       <View style={styles.sidebarView}>
         <Title title="Acciones" />
-        <View style={styles.optionContainerView}>        
-          <Option
-            title={'Enviar Reporte de Patio'}
-            subtitle={'Envia todos los datos del Reporte de Patio. Una ves realizado, \nno se podra realizar ningun cambio.'}
-            optionItemView={{flexDirection: 'column', alignItems: 'flex-start'}}
-            buttonStyle={{ marginLeft: 15, marginTop: 15, backgroundColor: "#999999" }}
-            onPress={onPressEnviar}
-            actionName={'Generar transacción'}
-          />
-          <Option
-            title={'Eliminar Reporte de Patio'}
-            subtitle={'Elimina los datos registrados del Reporte de Patio hasta el momento. \nAsimismo, se eliminaran todos los datos de los arboles \nregistrados hasta el momento.'}
-            optionItemView={{flexDirection: 'column', alignItems: 'flex-start'}}
-            buttonStyle={{ marginLeft: 15, marginTop: 15, backgroundColor: "red" }}
-            onPress={onPressEliminar}
-            actionName={'Eliminar'}
-          />
-        </View>
+        <ActividadAcciones
+          name={`Reporte de Patio`}
+          componentId={props.componentId} 
+          deleteActividad={props.deleteActividad}
+          onPressEnviar={onPressEnviar}
+          excludeEstructurar={['trozas']}
+        />
       </View>
     </Container>
   );
@@ -92,7 +122,7 @@ const ReportePatioScreen = (props: any) => {
 
 const styles = StyleSheet.create({
   containerView: {
-    flexDirection: 'column'
+    flexDirection: 'row'
   },
   optionItemsView: {
     flexDirection: 'row',
@@ -101,15 +131,16 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   optionContainerView: {
-    width: '100%',
-    paddingHorizontal: 20,
+    width: '100%'
   },
   contentView: {
     flexDirection: 'column',
     borderRightColor: '#ededed',
     borderRightWidth: 1,
+    flex: 1
   },
   sidebarView: {
+    width: '35%',
     flexDirection: 'column',
     shadowOffset: {
       width: 0,
