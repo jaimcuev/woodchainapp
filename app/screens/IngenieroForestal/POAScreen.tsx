@@ -1,127 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useNavigationComponentDidAppear } from 'react-native-navigation-hooks';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Container from '../../components/Container';
 import Title from '../../components/Title';
 import Option from '../../components/Option';
-import { NavigateTo, LocalToBlockchain } from '../../services/HelpfulFunctions';
-import { getFormsStorage, deleteFormsStorage } from '../../services/FormService';
-import { getArboles, eliminarActividad, eliminarArboles } from '../../services/IFService';
+import { NavigateTo } from '../../services/HelpfulFunctions';
 import { Navigation } from 'react-native-navigation';
 import { createPOA } from '../../services/POAService';
 import { createArbol } from '../../services/ArbolService';
+import ActividadAcciones from '../../components/ActividadAcciones';
+import POA from '../../models/POA';
+import { error, success, setMessage } from '../../actions/alerta.actions';
 
 const POAScreen = (props: any) => {
-  const options = [
-    {
-      number: 1,
-      title: 'Información general',
-      subtitle: 'Subtitulo de la accion',
-      actionName: 'Iniciar',
-      id: 'POAInformacionGeneral',
-      screen: 'POAInformacionGeneralScreen'
-    },
-    {
-      number: 2,
-      title: 'Información basica',
-      subtitle: 'Subtitulo de la accion',
-      actionName: 'Iniciar',
-      id: 'POAInformacionBasica',
-      screen: 'POAInformacionBasicaScreen'
-    },
-    {
-      number: 3,
-      title: 'Plan de aprovechamiento',
-      subtitle: 'Subtitulo de la accion',
-      actionName: 'Iniciar',
-      id: 'POAPlanAprovechamiento',
-      screen: 'POAPlanAprovechamientoScreen'
-    },
-    {
-      number: 4,
-      title: 'Plan silvicultural',
-      subtitle: 'Subtitulo de la accion',
-      actionName: 'Iniciar',
-      id: 'POAPlanSilvicultural',
-      screen: 'POAPlanSilviculturalScreen'
-    },
-  ];
-  const [procesOptions, setProcesOptions] = useState(options);
+  const dispatch = useDispatch();
+  const empresa = useSelector((state: any) => state.anexo.data.id);
+  const usuario = useSelector((state: any) => state.usuario.data);
+  const errorAlerta = useCallback(
+    (message: string, haveClose: boolean = true, options: any = []) => dispatch(error(message, haveClose, options)),
+    [dispatch],
+  );
+  const successAlerta = useCallback(
+    (message: string, haveClose: boolean, options: any) => dispatch(success(message, haveClose, options)),
+    [dispatch],
+  );
+  const cambiarMensajeAlerta = useCallback(
+    (message: string) => dispatch(setMessage(message)),
+    [dispatch],
+  );
 
-  useNavigationComponentDidAppear(e => {
-    const formsIds = options.map(item => item.id);
-    getFormsStorage(formsIds, (result: any) => {
-      const data = procesOptions.map((item: any) => {
-        item.data = result[item.id] || {};
-        item.actionName = result[item.id] ? 'Continuar' : 'Iniciar';
-        return item;
-      })
-      setProcesOptions(data);
-    });
-    return () => {
-    }
-  }, props.componentId);
-
-  const onPressEliminar = () => {
-    const formsIds = options.map(item => item.id);
-    deleteFormsStorage(formsIds, () => {
-      eliminarArboles().then( () => {
-        eliminarActividad('POA').then(() => {
-          Navigation.popToRoot(props.componentId);
-        });
-      } );
-    });
-  };
-  const onPressEnviar = () => {
-    if (!props.empresa) {
-      console.error("NO HAY EMPRESA ANEXADA");
-    } else {
-      let blockchain_result = {} as any;
-      procesOptions.forEach((papi_item: any) => {
-        const keys = Object.keys(papi_item.data);
-        let papi_result = {};
-        blockchain_result[papi_item.id] = {};
-        keys.forEach(mydata => {
-          const metadata = papi_item.data[mydata];
-          const localData = LocalToBlockchain(metadata, mydata);
-          papi_result = mergeData(papi_result, localData);
-        });
-        papi_item.blockchainData = papi_result;
-        blockchain_result[papi_item.id] = papi_result;
-        return papi_result;
-      });
-      getArboles().then(arboles => {
-        if (arboles) {
-          const papi_arboles = [] as any;
-          arboles.forEach((element: any) => {
-            const keys = Object.keys(element);
-            let arbolito = {} as any;
-            keys.forEach(mydata => {
-              const metadata = element[mydata];
-              const localData = LocalToBlockchain(metadata, mydata);
-              arbolito = mergeData(arbolito, localData);
-            });
-            papi_arboles.push(arbolito);
-          });
-          const usuarioId = props.usuario.id;
-          if (usuarioId) {
-            blockchain_result['POAInformacionGeneral']['ingenieroForestal'] = blockchain_result['POAInformacionGeneral']['ingenieroForestal'] || {};
-            blockchain_result['POAInformacionGeneral']['ingenieroForestal']['usuarioId'] = usuarioId;
-            blockchain_result['parentUsuario'] = props.empresa;
-            console.warn(blockchain_result);
-            createPOA(blockchain_result).then(resultado => {
+  const [procesOptions, setProcesOptions] = useState(POA);
+  const onPressEnviar = (anexo: string, data: any) => {
+    if( data && data.arboles && anexo ) {
+      let dataSubmit = data;
+      let arboles = dataSubmit.arboles;
+      delete dataSubmit.arboles;
+      dataSubmit.poaId = anexo;
+      if ( empresa ) {
+        const usuarioId = usuario.id;
+          if ( usuarioId ) {
+            dataSubmit['POAInformacionGeneral'] = dataSubmit['POAInformacionGeneral'] || {};
+            dataSubmit['POAInformacionGeneral']['ingenieroForestal'] = dataSubmit['POAInformacionGeneral']['ingenieroForestal'] || {};
+            dataSubmit['POAInformacionGeneral']['ingenieroForestal']['usuarioId'] = usuarioId;
+            dataSubmit['parentUsuario'] = empresa;
+            createPOA(dataSubmit).then(resultado => {
               if (resultado.status) {
                 const poaId = resultado.data;
-                const god_arboles = papi_arboles.map((item: any) => {
+                cambiarMensajeAlerta(`Se ha registrado el POA ${poaId} correctamente.`);
+                const _arboles = arboles.map((item: any) => {
                   item.poaId = poaId;
                   return item;
                 });
-                //let contador_arbolitos = 0;
                 const registrarArboles = (data: any, callback: Function, index = 0) => {
                   const baby_arbol = data[index];
-                  console.log(baby_arbol);
+                  cambiarMensajeAlerta(`Enviando la transacción de registro del arbol ${index + 1}.`);
                   createArbol(baby_arbol).then((respuestica) => {
+                    console.warn(respuestica);
                     if (data.length - 1 === index) {
                       callback();
                     } else {
@@ -129,25 +63,35 @@ const POAScreen = (props: any) => {
                     }
                   });
                 }
-                registrarArboles(god_arboles, () => {
-                  const formsIds = options.map(item => item.id);
-                  deleteFormsStorage(formsIds, () => {
-                    eliminarActividad('POA').then(() => {
-                      eliminarArboles().then(() => {
-                        Navigation.popToRoot(props.componentId);
-                      })
-                    })
-                  });
+                registrarArboles(_arboles, () => {
+                  props.deleteActividad();
+                  successAlerta( 'Transacción finalizada.', false, [
+                    {
+                      name: 'Volver al Inicio',
+                      onPress: () => Navigation.popToRoot(props.componentId)
+                    }
+                  ] );
                 });
+              } else {
+                
               }
             });
+          } else {
+            errorAlerta('Error al determinar al usuario.');
           }
-        } else {
-          console.error("NO HAY ARBOLES");
+      } else {
+        errorAlerta('Error al determinar la empresa anexada. Porfavor volver a intentarlo.');
+      }
+    } else {
+      errorAlerta('No se han encotrado arboles registrados.', false, [
+        {
+          name: 'Volver atras',
+          onPress: () => Navigation.pop(props.componentId)
         }
-      });
+      ]);
     }
   };
+
   const mergeData = (og: any, so: any) => {
     for (let key in so) {
       if (typeof og[key] === 'object') {
@@ -157,7 +101,8 @@ const POAScreen = (props: any) => {
       }
     }
     return og;
-  }
+  };
+
   return (
     <Container style={styles.containerView}>
       <View style={styles.contentView}>
@@ -173,7 +118,7 @@ const POAScreen = (props: any) => {
                     NavigateTo(props.componentId, option.screen, option.title, { data: option.data })
                   }
                   subtitle={option.subtitle}
-                  actionName={option.actionName}
+                  actionName={`Ingresar`}
                 />
               </View>
             );
@@ -182,21 +127,12 @@ const POAScreen = (props: any) => {
       </View>
       <View style={styles.sidebarView}>
         <Title title="Acciones" />
-        <Option
-          title={'Enviar POA'}
-          subtitle={'Envia todos los datos del POA. Una ves realizado, \nno se podra realizar ningun cambio.'}
-          optionItemView={{ flexDirection: 'column', alignItems: 'flex-start' }}
-          buttonStyle={{ marginLeft: 15, marginTop: 15, backgroundColor: "#999999" }}
-          onPress={onPressEnviar}
-          actionName={'Generar transacción'}
-        />
-        <Option
-          title={'Eliminar POA'}
-          subtitle={'Elimina los datos registrados del POA hasta el momento. \nAsimismo, se eliminaran todos los datos de los arboles \nregistrados hasta el momento.'}
-          optionItemView={{ flexDirection: 'column', alignItems: 'flex-start' }}
-          buttonStyle={{ marginLeft: 15, marginTop: 15, backgroundColor: "red" }}
-          onPress={onPressEliminar}
-          actionName={'Eliminar'}
+        <ActividadAcciones 
+          name={`POA`}
+          componentId={props.componentId} 
+          deleteActividad={props.deleteActividad}
+          onPressEnviar={onPressEnviar}
+          excludeEstructurar={['arboles']}
         />
       </View>
     </Container>
@@ -237,11 +173,4 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = (state: any) => {
-  return {
-    usuario: state.usuario.data,
-    empresa: state.anexo.data.id
-  }
-}
-
-export default connect(mapStateToProps)(POAScreen);
+export default POAScreen;

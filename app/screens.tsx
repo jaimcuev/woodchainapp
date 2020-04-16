@@ -12,7 +12,7 @@ import POAInformacionGeneralScreen from './screens/IngenieroForestal/POAInformac
 import POAPlanAprovechamientoScreen from './screens/IngenieroForestal/POAPlanAprovechamientoScreen';
 import POAPlanSilviculturalScreen from './screens/IngenieroForestal/POAPlanSilviculturalScreen';
 import RegistrarArbolScreen from './screens/IngenieroForestal/RegistrarArbolScreen';
-import PGMFScreen from './screens/Operador/PGMFScreen';
+import PGMFScreen from './screens/IngenieroForestal/PGMFScreen';
 import ReporteTalaScreen from './screens/Operador/ReporteTalaScreen';
 import ReportePatioScreen from './screens/Operador/ReportePatioScreen';
 import ReporteArrastreScreen from './screens/Operador/ReporteArrastreScreen';

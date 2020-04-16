@@ -16,8 +16,8 @@ export default [
           name: 'Numero de documento de identidad',
           validate: {
             type: 'number',
-            min: 7,
-            max: 7,
+            min: 8,
+            max: 8,
             required: true
           }
         },
@@ -25,7 +25,7 @@ export default [
           id: 'informacionGeneral_numeroRUC',
           name: 'Numero de RUC',
           validate: {
-            type: 'string',
+            type: 'number',
             min: 11,
             max: 11,
             required: true

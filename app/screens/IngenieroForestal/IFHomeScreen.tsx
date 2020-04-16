@@ -13,11 +13,19 @@ const IFHomeScreen = (props: any) => {
     props.storeAnexo({ id: empresaId });
   };
   const onPressPOA = () => {
-    if (!props.isActivePOA) props.iniciarPOA();
-    NavigateTo(props.componentId, 'POAScreen', 'Plan operativo anual (POA)');
+    if (!props.isActiveActividad) props.iniciarPOA();
+    NavigateTo(props.componentId, 'POAScreen', 'Plan operativo anual (POA)', {
+      deleteActividad: props.deleteActividad
+    });
+  };
+  const onPressPGMF = () => {
+    if (!props.isActiveActividad) props.iniciarPGMF();
+    NavigateTo(props.componentId, 'PGMFScreen', 'Plan General de Manejo Forestal (PGMF)', {
+      deleteActividad: props.deleteActividad
+    });
   };
   const onPressRegistrarArbol = () => {
-    if (props.isActivePOA) {
+    if (props.isActiveActividad === 'POA') {
       NavigateTo(props.componentId, 'RegistrarArbolScreen', 'Registrar arbol');
     }
   };
@@ -42,8 +50,16 @@ const IFHomeScreen = (props: any) => {
             number={1}
             title={'Plan Operativo Anual'}
             subtitle={'Subtitulo de la accion'}
-            actionDisabled={!props.empresa}
+            actionDisabled={ (props.empresa === "" || props.isActiveActividad !== 'POA') && props.isActiveActividad !== "" }
             onPress={onPressPOA}
+            actionName={'Iniciar'}
+          />
+          <Option
+            number={2}
+            title={'Plan General de Manejo Forestal'}
+            subtitle={'Subtitulo de la accion'}
+            actionDisabled={ (props.empresa === "" || props.isActiveActividad !== 'PGMF') && props.isActiveActividad !== "" }
+            onPress={onPressPGMF}
             actionName={'Iniciar'}
           />
         </View>
@@ -63,7 +79,7 @@ const IFHomeScreen = (props: any) => {
           />
           <Option
             number={2}
-            actionDisabled={!props.isActivePOA}
+            actionDisabled={props.isActiveActividad !== 'POA'}
             title={'Registrar Arbol'}
             onPress={onPressRegistrarArbol}
             subtitle={'Subtitulo de la accion'}
@@ -95,17 +111,29 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state: any) => {
   return {
     empresa: state.anexo.data.id,
-    isActivePOA: state.actividad.nombre,
+    isActiveActividad: state.actividad.nombre,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     iniciarPOA: () => {
-      dispatch(setActividad('POA'));
+      dispatch(setActividad('POA', [
+        'POAInformacionBasica',
+        'POAInformacionGeneral',
+        'POAPlanAprovechamiento',
+        'POAPlanSilvicultural'
+      ]));
+    },
+    iniciarPGMF: () => {
+      dispatch(setActividad('PGMF', [
+      ]));
     },
     eliminarAnexo: () => {
       dispatch(destroyAnexo());
+      dispatch(destroyActividad());
+    },
+    deleteActividad: () => {
       dispatch(destroyActividad());
     },
     storeAnexo: (data: any) => {

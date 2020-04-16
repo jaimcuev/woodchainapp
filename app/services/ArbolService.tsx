@@ -1,6 +1,17 @@
 import { Respuesta } from './HelpfulFunctions';
 import environment from '../environments';
 
+export const getArboles = async () => {
+  return fetch(`${environment.apiURL}/arbol/all`)
+  .then(res => res.json())
+  .catch(() => {
+    return Respuesta(false, 'Error al conectarse con el servidor.');
+  })
+  .then(async response => {
+    return Respuesta(true, 'Se ha generado la transacción de manera exitosa.', response);
+  });
+};
+
 export const createArbol = async (data: string) => {
   return fetch(`${environment.apiURL}/arbol/create`, {
     method: 'POST',

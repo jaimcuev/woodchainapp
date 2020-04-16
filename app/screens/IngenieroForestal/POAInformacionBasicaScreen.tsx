@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import Container from '../../components/Container';
-import Formv2 from '../../components/Formv2';
 import POAInformacionBasica from '../../models/POAInformacionBasica';
+import Formv3 from '../../components/Formv3';
 
 const POAInformacionBasicaScreen = (props: any) => {
   const [steps] = useState(POAInformacionBasica);
   return (
     <Container>
-      <Formv2 
+      <Formv3
         formId={'POAInformacionBasica'}
         steps={steps}
         componentId={props.componentId}
