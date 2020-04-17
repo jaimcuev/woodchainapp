@@ -30,6 +30,8 @@ import ReporteTalaAnexarArbolScreen from './screens/Operador/ReporteTalaAnexarAr
 import GenerarTransaccionScreen from './screens/GenerarTransaccionScreen';
 import ReporteArrastreAnexarArbolScreen from './screens/Operador/ReporteArrastreAnexarArbolScreen';
 import ReportePatioRegistrarTrozaScreen from './screens/Operador/ReportePatioRegistrarTrozaScreen';
+import PGMFResumenEjecutivoScreen from './screens/IngenieroForestal/PGMFResumenEjecutivoScreen';
+import PGMFSubirArchivoScreen from './screens/IngenieroForestal/PGMFSubirArchivoScreen';
 
 export function registerScreens(): void {  
   Navigation.registerComponent('navigation.InitScreen', () => gestureHandlerRootHOC(ReduxProvider(InitScreen)), () => InitScreen);
@@ -39,18 +41,25 @@ export function registerScreens(): void {
   Navigation.registerComponent('navigation.LoginScreen', () => gestureHandlerRootHOC(ReduxProvider(LoginScreen)), () => LoginScreen);
   Navigation.registerComponent('navigation.IFHomeScreen', () => gestureHandlerRootHOC(ReduxProvider(IFHomeScreen)), () => LoginScreen);
   Navigation.registerComponent('navigation.OHomeScreen', () => gestureHandlerRootHOC(ReduxProvider(OHomeScreen)), () => LoginScreen);
+  
   // Registro de arboles
   Navigation.registerComponent('navigation.RegistrarArbolScreen', () => gestureHandlerRootHOC(ReduxProvider(RegistrarArbolScreen)), () => RegistrarArbolScreen);
+  
   // Plan operativo anual (POA)
   Navigation.registerComponent('navigation.POAScreen', () => gestureHandlerRootHOC(ReduxProvider(POAScreen)), () => POAScreen);
   Navigation.registerComponent('navigation.POAInformacionBasicaScreen', () => gestureHandlerRootHOC(ReduxProvider(POAInformacionBasicaScreen)), () => POAInformacionBasicaScreen);
   Navigation.registerComponent('navigation.POAInformacionGeneralScreen', () => gestureHandlerRootHOC(ReduxProvider(POAInformacionGeneralScreen)), () => POAInformacionGeneralScreen);
   Navigation.registerComponent('navigation.POAPlanAprovechamientoScreen', () => gestureHandlerRootHOC(ReduxProvider(POAPlanAprovechamientoScreen)), () => POAPlanAprovechamientoScreen);
   Navigation.registerComponent('navigation.POAPlanSilviculturalScreen', () => gestureHandlerRootHOC(ReduxProvider(POAPlanSilviculturalScreen)), () => POAPlanSilviculturalScreen);
+  
   // Plan general de manejo forstal (PGMF)
   Navigation.registerComponent('navigation.PGMFScreen', () => gestureHandlerRootHOC(ReduxProvider(PGMFScreen)), () => PGMFScreen);
+  Navigation.registerComponent('navigation.PGMFResumenEjecutivoScreen', () => gestureHandlerRootHOC(ReduxProvider(PGMFResumenEjecutivoScreen)), () => PGMFResumenEjecutivoScreen);
+  Navigation.registerComponent('navigation.PGMFSubirArchivoScreen', () => gestureHandlerRootHOC(ReduxProvider(PGMFSubirArchivoScreen)), () => PGMFSubirArchivoScreen);
+
   // Registrar Empresa Taladora
   Navigation.registerComponent('navigation.RegistrarEmpresaTaladoraScreen', () => gestureHandlerRootHOC(ReduxProvider(RegistrarEmpresaTaladoraScreen)), () => RegistrarEmpresaTaladoraScreen);
+ 
   // Reportes
   Navigation.registerComponent('navigation.ReporteTalaScreen', () => gestureHandlerRootHOC(ReduxProvider(ReporteTalaScreen)), () => ReporteTalaScreen);
   Navigation.registerComponent('navigation.ReporteTalaAnexarArbolScreen', () => gestureHandlerRootHOC(ReduxProvider(ReporteTalaAnexarArbolScreen)), () => ReporteTalaAnexarArbolScreen);
@@ -61,7 +70,6 @@ export function registerScreens(): void {
   Navigation.registerComponent('navigation.ReporteArrastreScreen', () => gestureHandlerRootHOC(ReduxProvider(ReporteArrastreScreen)), () => ReporteArrastreScreen);
   Navigation.registerComponent('navigation.ReporteArrastreInformacionScreen', () => gestureHandlerRootHOC(ReduxProvider(ReporteArrastreInformacionScreen)), () => ReporteArrastreInformacionScreen);
   Navigation.registerComponent('navigation.ReporteArrastreAnexarArbolScreen', () => gestureHandlerRootHOC(ReduxProvider(ReporteArrastreAnexarArbolScreen)), () => ReporteArrastreAnexarArbolScreen);
-  
 
   // Registrar POA para Reportes
   Navigation.registerComponent('navigation.RegistrarPOAScreen', () => gestureHandlerRootHOC(ReduxProvider(RegistrarPOAScreen)), () => RegistrarPOAScreen);
