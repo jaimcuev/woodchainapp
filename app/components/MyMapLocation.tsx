@@ -52,8 +52,8 @@ class MyMapLocation extends Component {
             />
             <MapboxGL.Camera
               zoomLevel={18}
-              //centerCoordinate={[this.state.longitud, this.state.latitud]}
-              centerCoordinate={[ -77.069986 , -12.089278 ]}
+              centerCoordinate={[this.state.longitud, this.state.latitud]}
+              //centerCoordinate={[ -77.069986 , -12.089278 ]}
             />
             { this.state.markers && this.state.markers.length > 0 ? (
               this.state.markers.map( (marker: any) => {
