@@ -53,7 +53,7 @@ const OHomeScreen = (props: any) => {
                 title={option.title}
                 onPress={() => onPressReporte(option.id, option.screen, option.title)}
                 subtitle={option.subtitle}
-                actionDisabled={ (poaId === "" || reporteActivo !== option.id) && reporteActivo !== "" }
+                actionDisabled={ !poaId || (poaId === "" || reporteActivo !== option.id) && reporteActivo !== "" }
                 actionName={reporteActivo === option.id ? 'Continuar' : 'Iniciar'}
               />
             );

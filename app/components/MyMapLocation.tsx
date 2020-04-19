@@ -52,15 +52,19 @@ class MyMapLocation extends Component {
             />
             <MapboxGL.Camera
               zoomLevel={18}
-              centerCoordinate={[this.state.longitud, this.state.latitud]}
-              //centerCoordinate={[ -74.555871, -8.322038 ]}
+              //centerCoordinate={[this.state.longitud, this.state.latitud]}
+              centerCoordinate={[ -77.069986 , -12.089278 ]}
             />
             { this.state.markers && this.state.markers.length > 0 ? (
               this.state.markers.map( (marker: any) => {
-                return <MapboxGL.MarkerView key={marker.id} coordinate={[ parseFloat(marker.ubicacion.longitud), parseFloat(marker.ubicacion.latitud) ]}>
-                <TouchableOpacity onPress={() => this.onPressMarker(marker)} style={styles.markerButton}>
-                </TouchableOpacity>
-              </MapboxGL.MarkerView>
+                return <MapboxGL.PointAnnotation 
+                  key={marker.id} 
+                  id={marker.id} 
+                  onSelected={() => this.onPressMarker(marker)}
+                  coordinate={[ 
+                  parseFloat(marker.ubicacion.longitud), 
+                  parseFloat(marker.ubicacion.latitud) 
+                ]} />
               } )
             ) : null }
 

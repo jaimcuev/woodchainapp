@@ -19,6 +19,7 @@
     "react": "16.11.0",
     "react-native": "0.62.1",
     "react-native-document-picker": "^3.3.3",
+    "react-native-fs": "^2.16.6",
     "react-native-geolocation-service": "^4.0.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-modal": "^11.5.6",
