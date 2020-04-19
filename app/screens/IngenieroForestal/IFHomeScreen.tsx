@@ -50,7 +50,7 @@ const IFHomeScreen = (props: any) => {
             number={1}
             title={'Plan Operativo Anual'}
             subtitle={'Subtitulo de la accion'}
-            actionDisabled={ (props.empresa === "" || props.isActiveActividad !== 'POA') && props.isActiveActividad !== "" }
+            actionDisabled={ !props.empresa || (props.empresa === "" || props.isActiveActividad !== 'POA') && props.isActiveActividad !== "" }
             onPress={onPressPOA}
             actionName={'Iniciar'}
           />
@@ -58,7 +58,7 @@ const IFHomeScreen = (props: any) => {
             number={2}
             title={'Plan General de Manejo Forestal'}
             subtitle={'Subtitulo de la accion'}
-            actionDisabled={ (props.empresa === "" || props.isActiveActividad !== 'PGMF') && props.isActiveActividad !== "" }
+            actionDisabled={ !props.empresa || (props.empresa === "" || props.isActiveActividad !== 'PGMF') && props.isActiveActividad !== "" }
             onPress={onPressPGMF}
             actionName={'Iniciar'}
           />
