@@ -61,6 +61,72 @@ const ReporteTalaAnexarArbolScreen = (props: any) => {
   const onPressAnexar = () => {
     let _dataActividad = dataActividad || {};
     _dataActividad['arboles'] = selectedItems;
+
+    //storeDataActividad(_dataActividad);
+    //Navigation.pop(props.componentId);
+
+    let _dataReporteTalaInformacion = {} as any;
+    _dataReporteTalaInformacion = _dataActividad['ReporteTalaInformacion'] || {};
+    const keys = Object.keys(_dataReporteTalaInformacion);
+    let cantidadFilas = -1;
+    let arboles_ids = [] as any;  
+    let arboles_data_id = [] as any; 
+    keys.forEach(element => {
+      if( element.includes('informacionDetallada') ) {
+        const nrow = parseInt(element.replace(/[^0-9]/g, ''));
+        if ( _dataReporteTalaInformacion ) {
+          if(_dataReporteTalaInformacion[`informacionDetallada_codigo_${nrow}`] ) {
+            const _arbolId = _dataReporteTalaInformacion[`informacionDetallada_codigo_${nrow}`].value;
+            if( !arboles_ids.includes(_arbolId) ) {
+              arboles_ids.push(_arbolId);
+              arboles_data_id.push({ arbolId: _arbolId, nrow: nrow });
+            }
+          }
+        }
+        if( nrow >= cantidadFilas ) cantidadFilas = nrow; 
+      }
+    });
+    let newRows = cantidadFilas;
+    const diferenciaIds = selectedItems.filter( (i: any) => !arboles_ids.includes(i.id) );
+    const eliminados = arboles_ids.filter( (i: any) => !selectedItems.map( (j: any) => j.id ).includes(i) );
+        
+    diferenciaIds.forEach((element: any) => {
+      newRows = newRows + 1;
+      _dataReporteTalaInformacion[`informacionDetallada_codigo_${newRows}`] = {
+        "value": element.id,
+        "type": "MyTable"
+      };
+      _dataReporteTalaInformacion[`informacionDetallada_especie_${newRows}`] = {
+        "value": element.informacionGeneral?.especie,
+        "type": "MyTable"
+      };
+      _dataReporteTalaInformacion[`informacionDetallada_LARm_${newRows}`] = {
+        "value": element.dimensiones?.largo,
+        "type": "MyTable"
+      };
+      _dataReporteTalaInformacion[`informacionDetallada_VOLm_${newRows}`] = {
+        "value": element.dimensiones?.volumen,
+        "type": "MyTable"
+      };
+    });
+    eliminados.forEach((element: any) => {
+      const _nrow = arboles_data_id.find( (a: any) => a.arbolId === element ).nrow;
+      delete _dataReporteTalaInformacion[`informacionDetallada_codigo_${_nrow}`];
+      delete _dataReporteTalaInformacion[`informacionDetallada_especie_${_nrow}`];
+      delete _dataReporteTalaInformacion[`informacionDetallada_LARm_${_nrow}`];
+      delete _dataReporteTalaInformacion[`informacionDetallada_VOLm_${_nrow}`];
+      delete _dataReporteTalaInformacion[`informacionDetallada_carga_${_nrow}`];
+      delete _dataReporteTalaInformacion[`informacionDetallada_diamMayorCm_${_nrow}`];
+      delete _dataReporteTalaInformacion[`informacionDetallada_diamMrenorCm_${_nrow}`];
+      delete _dataReporteTalaInformacion[`informacionDetallada_patio_${_nrow}`];
+      delete _dataReporteTalaInformacion[`informacionDetallada_observaciones_${_nrow}`];
+    });    
+
+    if( eliminados.length ) {
+      // TODO: Cuando se elimina un arbol, no desaparece la fila en la tabla
+    }
+
+    _dataActividad['ReporteTalaInformacion'] = _dataReporteTalaInformacion;
     storeDataActividad(_dataActividad);
     Navigation.pop(props.componentId);
   };

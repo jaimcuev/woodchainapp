@@ -62,11 +62,8 @@ export default [
           name: 'Información detallada',
           component: 'MyTable',
           options: {
+            max_rows: 1,
             columns: [
-              {
-                name: 'Item',
-                id: 'informacionDetallada_item',
-              },
               {
                 name: 'Especie',
                 id: 'informacionDetallada_especie',
