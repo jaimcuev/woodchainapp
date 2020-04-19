@@ -51,7 +51,7 @@ class MyMapLocation extends Component {
               visible={true} 
             />
             <MapboxGL.Camera
-              zoomLevel={18}
+              zoomLevel={14}
               centerCoordinate={[this.state.longitud, this.state.latitud]}
               //centerCoordinate={[ -77.069986 , -12.089278 ]}
             />
