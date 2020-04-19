@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Navigation } from 'react-native-navigation';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import Container from '../../components/Container';
 import Form from '../../components/Form';
 import { findByParentUsuario } from '../../services/POAService';
+import { error, success, loading } from '../../actions/alerta.actions';
 
 const ReportePatioScreen = (props: any) => {
+  const dispatch = useDispatch();
+  const errorAlerta = useCallback(
+    (message: string) => dispatch(error(message)),
+    [dispatch],
+  );
+  const successAlerta = useCallback(
+    (message: string, haveClose: boolean, options: any) => dispatch(success(message, haveClose, options)),
+    [dispatch],
+  );
+  const loadingAlerta = useCallback(
+    (message: string) => dispatch(loading(message)),
+    [dispatch],
+  );
+
   const steps = [
     {
       id: 'registrarPOA',
@@ -19,15 +34,27 @@ const ReportePatioScreen = (props: any) => {
     },
   ];
   const submitForm = (data: any, localData: any) => {
-    const myPoaId = localData.registrarPOA_codigoPOA.value;
+    const myPoaId = localData?.registrarPOA_codigoPOA?.value;
     if( myPoaId ) {
+      loadingAlerta('Evaluando transacción en la red.');
       const parentUsuario = props.usuario.parentUsuario;
       findByParentUsuario(myPoaId, parentUsuario).then( (result: any) => {
         if( result.data.poaId ) {
           props.passPOA( result.data.poaId );
-          Navigation.popToRoot(props.componentId);
+          successAlerta( 'POA anexado correctamente.', false, [
+            {
+              name: 'Volver al inicio',
+              onPress: () => {
+                Navigation.popToRoot(props.componentId);
+              }
+            }
+          ] );
+        } else {
+          errorAlerta('Error al anexar el POA. Asegurate de que este pertenesca a la organización y se encuentre aprobado para continuar.');
         }
       } );
+    } else {
+      errorAlerta('Error, el codigo del POA es requerido');
     }
   };
   return (
