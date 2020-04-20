@@ -33,6 +33,10 @@ export default [
             },
             {
               id: 'resumenEjecutivo_delPGMF_certificadoHabilitacionIngForestal',
+              name: 'Certificado de habilitación del Ing. Forestal',
+            },
+            {
+              id: 'resumenEjecutivo_delPGMF_certificadoHabilitacionIngForestal',
               name: 'N° de inscripción en el registro de consultores forestales',
             },
             {
@@ -68,7 +72,7 @@ export default [
             },
             {
               id: 'resumenEjecutivo_delPGMF_numeroBloquesQuinquenales',
-              name: 'Representante legal',
+              name: 'N° de bloques Quinquenales',
             },
             {
               id: 'resumenEjecutivo_delPGMF_potencialMaderableConcesion',
