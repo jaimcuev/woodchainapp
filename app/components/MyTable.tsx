@@ -7,10 +7,18 @@ const MyTable = (props: any) => {
   const onPressAnadir = () => {
     setRows(rows + 1);
   };
+  
+  const onPressAnadirDataEntry = () => {
+    if( props.onPressAddItem ) {
+      props.onPressAddItem();
+    }
+  };
+
   useEffect(() => {
     const id = props.id;
     const keys = Object.keys(props.local);
     let max = 0;
+
     keys.forEach(name => {
       if( name.includes(id) ) {
         var matches = name.match(/(\d+)/);
@@ -25,7 +33,8 @@ const MyTable = (props: any) => {
     setRows(max + 1);
     return () => {
     }
-  }, [props.local]);
+  }, [ Object.keys(props.local) ]);
+
   return (
     <View style={styles.textinputView}>
       <View style={styles.headerView}>
@@ -37,6 +46,11 @@ const MyTable = (props: any) => {
             style={styles.anadirButton}
           />
         )}
+        { props.dataEntry && ( <MyButton
+            onPress={onPressAnadirDataEntry}
+            name={'Añadir item'}
+            style={styles.anadirButton}
+          /> ) }
       </View>
       <View style={styles.tableView}>
         <View style={[styles.tableRowView, styles.tableHeaderView]}>

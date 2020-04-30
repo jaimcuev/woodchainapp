@@ -32,6 +32,7 @@ import ReporteArrastreAnexarArbolScreen from './screens/Operador/ReporteArrastre
 import ReportePatioRegistrarTrozaScreen from './screens/Operador/ReportePatioRegistrarTrozaScreen';
 import PGMFResumenEjecutivoScreen from './screens/IngenieroForestal/PGMFResumenEjecutivoScreen';
 import PGMFSubirArchivoScreen from './screens/IngenieroForestal/PGMFSubirArchivoScreen';
+import GTFRegistrarListaTrozasScreen from './screens/Operador/GTFRegistrarListaTrozasScreen';
 
 export function registerScreens(): void {  
   Navigation.registerComponent('navigation.InitScreen', () => gestureHandlerRootHOC(ReduxProvider(InitScreen)), () => InitScreen);
@@ -79,6 +80,9 @@ export function registerScreens(): void {
   Navigation.registerComponent('navigation.GTFInformacionGeneralScreen', () => gestureHandlerRootHOC(ReduxProvider(GTFInformacionGeneralScreen)), () => GTFInformacionGeneralScreen);
   Navigation.registerComponent('navigation.GTFDetalleProductoScreen', () => gestureHandlerRootHOC(ReduxProvider(GTFDetalleProductoScreen)), () => GTFDetalleProductoScreen);
   Navigation.registerComponent('navigation.GTFTransportistaScreen', () => gestureHandlerRootHOC(ReduxProvider(GTFTransportistaScreen)), () => GTFTransportistaScreen);
+  Navigation.registerComponent('navigation.GTFRegistrarListaTrozasScreen', () => gestureHandlerRootHOC(ReduxProvider(GTFRegistrarListaTrozasScreen)), () => GTFRegistrarListaTrozasScreen);
+
+  
 }
 
 export function navigateGuest(): void {

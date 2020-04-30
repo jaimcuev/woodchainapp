@@ -21,7 +21,7 @@ export const createTroza = async (data: string) => {
     });
 };
 
-export const getTroza = async () => {
+export const getTrozas = async () => {
   return fetch(`${environment.apiURL}/troza/all`)
     .then(res => res.json())
     .catch(() => {
@@ -36,6 +36,23 @@ export const anexarReportePatio = async (trozaId: string, reporteId: string) => 
   return fetch(`${environment.apiURL}/troza/${trozaId}/anexar/reporte-patio`, {
     method: 'PUT',
     body: JSON.stringify({ reporteId }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(res => res.json())
+  .catch(() => {
+    return Respuesta(false, 'Error al conectarse con el servidor.');
+  })
+  .then(async response => {
+    return Respuesta(true, 'Se ha generado la transacción de manera exitosa.', response);
+  });
+};
+
+export const anexarGTF = async (trozaId: string, gtfId: string) => {
+  return fetch(`${environment.apiURL}/troza/${trozaId}/anexar/gtf`, {
+    method: 'PUT',
+    body: JSON.stringify({ gtfId }),
     headers: {
       'Content-Type': 'application/json',
     },

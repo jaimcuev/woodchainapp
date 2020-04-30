@@ -1,32 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '../../components/Container';
-import Form from '../../components/Form';
+import Formv3 from '../../components/Formv3';
+import GTFDetalleProducto from '../../models/GTFDetalleProducto';
 
 const GTFDetalleProductoScreen = (props: any) => {
-  const steps = [
-    {
-      id: "detalleProducto",
-      name: "Transportista",
-      fields: [
-        {
-          id: "detalleProducto_listaTrozas",
-          name: "Lista (s) de Trozas N°",
-        },
-        {
-          id: "detalleProducto_numeroGtfOrigen",
-          name: "N° GTF de origen",
-        }
-      ],
-    },
-  ];  
-  const submitForm = (data: any, localData: any) => {
-  };
+  const [steps] = useState(GTFDetalleProducto);
   return (
     <Container>
-      <Form 
-        local={props.data || {}} 
-        submitForm={submitForm} 
+      <Formv3
+        formId={'GTFDetalleProducto'}
         steps={steps}
+        componentId={props.componentId}
       />
     </Container>
   );
