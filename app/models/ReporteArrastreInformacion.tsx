@@ -24,10 +24,6 @@ export default [
           name: 'Codigo de maquina',
         },
         {
-          id: 'informacionGeneral_fecha',
-          name: 'Fecha',
-        },
-        {
           id: 'informacionGeneral_ayudante',
           name: 'Ayudante',
         },

@@ -9,6 +9,7 @@ import MyButton from './MyButton';
 import MySelect from './MySelect';
 import MyTable from './MyTable';
 import MyMap from './MyMap';
+import MyTableDataEntry from './MyTableDataEntry';
 
 import { validateTextInput } from '../services/ValidateForm';
 
@@ -228,6 +229,14 @@ const Formv3 = (props: any) => {
       case 'MyTable':
         return (
           <MyTable 
+            onChange={onChange} 
+            local={localData || {}} 
+            {...field} 
+          />
+          );
+      case 'MyTableDataEntry':
+        return (
+          <MyTableDataEntry
             onChange={onChange} 
             local={localData || {}} 
             {...field} 

@@ -1,3 +1,5 @@
+import { getTrozas } from "../services/TrozaService";
+
 export default [
   {
     id: 'listadoTrozasCuartonesMovilizar',
@@ -10,8 +12,32 @@ export default [
       {
         id: 'listadoTrozasCuartonesMovilizar',
         name: 'Listado de trozas o cuartones a movilizar',
-        component: 'MyTable',
+        component: 'MyTableDataEntry',
         options: {
+          max_rows: 1,
+          dataEntry: {
+            endpoint: getTrozas,
+            texts: [ 
+              {
+                name: 'ID',
+                value: 'id'
+              },
+              {
+                name: 'Seccion',
+                value: 'seccion'
+              }
+            ],
+            entry: [
+              {
+                key: 'especie',
+                value: 'listadoTrozasCuartonesMovilizar_especieNombreCientifico'
+              },
+              {
+                key: 'id',
+                value: 'listadoTrozasCuartonesMovilizar_codificacion'
+              }
+            ]
+          },
           columns: [
             {
               name: 'Especie',

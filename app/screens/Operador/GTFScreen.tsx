@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useNavigationComponentDidAppear } from 'react-native-navigation-hooks';
 import { NavigateTo } from '../../services/HelpfulFunctions';
@@ -7,8 +7,28 @@ import Title from '../../components/Title';
 import Option from '../../components/Option';
 import { getLocalReporte } from '../../services/OService';
 import { Navigation } from 'react-native-navigation';
+import ActividadAcciones from '../../components/ActividadAcciones';
+import { setMessage, error, success } from '../../actions/alerta.actions';
+import { useSelector, useDispatch } from 'react-redux';
+import { createGTF } from '../../services/GTFService';
+import { anexarGTF } from '../../services/TrozaService';
 
 const GTFScreen = (props: any) => {
+  const dispatch = useDispatch();
+  const usuario = useSelector((state: any) => state.usuario.data);
+  const errorAlerta = useCallback(
+    (message: string, haveClose: boolean = true, options: any = []) => dispatch(error(message, haveClose, options)),
+    [dispatch],
+  );
+  const successAlerta = useCallback(
+    (message: string, haveClose: boolean, options: any) => dispatch(success(message, haveClose, options)),
+    [dispatch],
+  );
+  const cambiarMensajeAlerta = useCallback(
+    (message: string) => dispatch(setMessage(message)),
+    [dispatch],
+  );
+
   const options = [
     {
       number: 1,
@@ -42,16 +62,81 @@ const GTFScreen = (props: any) => {
       id: 'GTFDetalleProducto',
       screen: 'GTFDetalleProductoScreen'
     },
+    {
+      number: 5,
+      title: 'Lista de trozas',
+      subtitle: 'Subtitulo de la accion',
+      actionName: 'Iniciar',
+      id: 'GTFRegistrarListaTrozas',
+      screen: 'GTFRegistrarListaTrozasScreen'
+    },
   ];
   const [procesOptions, setProcesOptions] = useState(options);
-  const onPressEnviar = () => {
+  
+  const onPressEnviar = (anexo: string, data: any) => {
+    if( data && anexo ) {
+      let dataSubmit = data;
+      const getTrozas = (_data: any) => {
+        const _trozas = _data['GTFRegistrarListaTrozas']['listadoTrozasCuartonesMovilizar'];
+        const _keys = Object.keys(_trozas);
+        const _returnTrozas = _keys.map( i => {
+          const t = _trozas[i];
+          return t.codificacion;
+        } );
+        return _returnTrozas;
+      };
+      let trozas = getTrozas(dataSubmit); 
+      dataSubmit.poaId = anexo;
+        const usuarioId = usuario.id;
+          if ( usuarioId ) {
+            dataSubmit['usuarioId'] = usuarioId;
+            createGTF(dataSubmit).then(resultado => {
+              if (resultado.status) {
+                const gtfId = resultado.data;
 
+                const anexarTrozas = (data: any, callback: Function, index = 0) => {
+                  const troza = data[index];
+                  cambiarMensajeAlerta(`Anexando Troza ${troza}.`);
+                  anexarGTF(troza, gtfId).then((respuestica) => {
+                    if (data.length - 1 === index) {
+                      callback();
+                    } else {
+                      anexarTrozas(data, callback, index + 1);
+                    }
+                  });
+                }
+                anexarTrozas(trozas, () => {
+                  props.deleteActividad();
+                  successAlerta( 'Transacción finalizada.', false, [
+                    {
+                      name: 'Volver al Inicio',
+                      onPress: () => Navigation.popToRoot(props.componentId)
+                    }
+                  ] );
+                });
+
+
+                props.deleteActividad();
+                Navigation.popToRoot(props.componentId);
+              } else {
+                
+              }
+            });
+          } else {
+            errorAlerta('Error al determinar al usuario.');
+          }
+    } else {
+      errorAlerta('No se han encotrado trozas registradas.', false, [
+        {
+          name: 'Volver atras',
+          onPress: () => Navigation.pop(props.componentId)
+        }
+      ]);
+    }
   };
-  const onPressEliminar = () => {
-    Navigation.popToRoot(props.componentId);
-  };
+
   return (
-    <Container stryle={styles.containerView}>
+    <Container style={styles.containerView}>
       <View style={styles.contentView}>
         <Title title="Información requerida" />
         <View style={styles.optionItemsView}>
@@ -74,24 +159,13 @@ const GTFScreen = (props: any) => {
       </View>
       <View style={styles.sidebarView}>
         <Title title="Acciones" />
-        <View style={styles.optionContainerView}>        
-          <Option
-            title={'Enviar GTF'}
-            subtitle={'Envia todos los datos del GTF. Una ves realizado, \nno se podra realizar ningun cambio.'}
-            optionItemView={{flexDirection: 'column', alignItems: 'flex-start'}}
-            buttonStyle={{ marginLeft: 15, marginTop: 15, backgroundColor: "#999999" }}
-            onPress={onPressEnviar}
-            actionName={'Generar transacción'}
-          />
-          <Option
-            title={'Eliminar GTF'}
-            subtitle={'Elimina los datos registrados del GTF hasta el momento. \nAsimismo, se eliminaran todos los datos de los arboles \nregistrados hasta el momento.'}
-            optionItemView={{flexDirection: 'column', alignItems: 'flex-start'}}
-            buttonStyle={{ marginLeft: 15, marginTop: 15, backgroundColor: "red" }}
-            onPress={onPressEliminar}
-            actionName={'Eliminar'}
-          />
-        </View>
+        <ActividadAcciones
+          name={`GTF`}
+          componentId={props.componentId} 
+          deleteActividad={props.deleteActividad}
+          onPressEnviar={onPressEnviar}
+          excludeEstructurar={['trozas']}
+        />
       </View>
     </Container>
   );

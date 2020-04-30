@@ -24,10 +24,6 @@ export default [
           name: 'Ayudante',
         },
         {
-          id: 'informacionGeneral_fecha',
-          name: 'Fecha',
-        },
-        {
           id: 'informacionGeneral_codigoMotocierra',
           name: 'Codigo de motocierra',
         },

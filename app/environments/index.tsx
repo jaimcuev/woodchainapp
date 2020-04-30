@@ -1,3 +1,5 @@
-export default {
-  apiURL: 'http://192.168.0.101:8080'
-}
+import local from './local';
+import cloud from './cloud';
+import vlan from './vlan';
+
+export default cloud;

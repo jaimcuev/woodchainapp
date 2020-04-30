@@ -35,7 +35,6 @@ const POAScreen = (props: any) => {
       let dataSubmit = data;
       let arboles = dataSubmit.arboles;
       delete dataSubmit.arboles;
-      dataSubmit.poaId = anexo;
       if ( empresa ) {
         const usuarioId = usuario.id;
           if ( usuarioId ) {
