@@ -60,6 +60,7 @@ const PGMFSubirArchivoScreen = (props: any) => {
       };
       storeDataActividad(_dataActividad);
       Navigation.pop(props.componentId);
+    } else {
     }
   };
 
