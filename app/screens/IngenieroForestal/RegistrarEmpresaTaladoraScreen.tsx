@@ -61,7 +61,7 @@ const RegistrarEmpresaTaladoraScreen = (props: any) => {
           data={visibleEmpresas}
           renderItem={({ item }) => (
             <Option
-              title={`${item.id}: ${item.nombre} ${item.apellidos}`}
+              title={`${item.id}: ${item.nombre} ${item.apellidos} - ${item.empresa}`}
               subtitle={`Documento de identidad: ${item.dni} - Dirección: ${item.direccion}`}
               onPress={() => onPressRegistrarEmpresaTaladora(item)}
               actionName={'Anexar'}

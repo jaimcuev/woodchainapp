@@ -5,7 +5,7 @@ export default [
       fields: [
         {
           id: 'informacionGeneral_nombreTitular',
-          name: 'Nombre del titular',
+          name: 'Nombre del Representante',
           validate: {
             type: 'string',
             required: true
@@ -13,11 +13,19 @@ export default [
         },
         {
           id: 'informacionGeneral_numeroDocumentoIdentidad',
-          name: 'Numero de documento de identidad',
+          name: 'Numero de documento de identidad del representante',
           validate: {
             type: 'number',
             min: 8,
             max: 8,
+            required: true
+          }
+        },
+        {
+          id: 'informacionGeneral_nombreTitular',
+          name: 'Nombre del titular',
+          validate: {
+            type: 'string',
             required: true
           }
         },
@@ -41,7 +49,7 @@ export default [
         },
         {
           id: 'ingenieroForestal_numeroInrena',
-          name: 'Numero de Inrena',
+          name: 'Número de Inrena del Ingeniero Forestal',
           validate: {
             type: 'string',
             required: true
