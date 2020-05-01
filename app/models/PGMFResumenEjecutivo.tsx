@@ -36,7 +36,7 @@ export default [
               name: 'Certificado de habilitación del Ing. Forestal',
             },
             {
-              id: 'resumenEjecutivo_delPGMF_certificadoHabilitacionIngForestal',
+              id: 'resumenEjecutivo_delPGMF_numeroInscripcionRegistroConsultoresForestales',
               name: 'N° de inscripción en el registro de consultores forestales',
             },
             {
