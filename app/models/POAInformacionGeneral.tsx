@@ -4,7 +4,7 @@ export default [
       name: 'Informacion General',
       fields: [
         {
-          id: 'informacionGeneral_nombreTitular',
+          id: 'informacionGeneral_nombreRepresentanteTitular',
           name: 'Nombre del Representante',
           validate: {
             type: 'string',
