@@ -6,6 +6,9 @@ export default [
         {
           id: 'registrarPOA_codigoPOA',
           name: 'Codigo del POA',
+          validate: {
+            required: true
+          }
         },
       ],
     },

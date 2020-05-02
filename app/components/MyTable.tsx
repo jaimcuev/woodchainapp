@@ -30,7 +30,14 @@ const MyTable = (props: any) => {
         } 
       }
     });
-    setRows(max + 1);
+    
+    const toAdd = max + 1;
+    if( rows >  toAdd) {
+      setRows(rows);
+    } else {
+      setRows(toAdd);
+    }
+
     return () => {
     }
   }, [ Object.keys(props.local) ]);

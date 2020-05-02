@@ -18,7 +18,7 @@ const OHomeScreen = (props: any) => {
     [dispatch],
   );
   const storeActividad = useCallback(
-    (data: string) => dispatch(setActividad(data)),
+    (data: string, formToValidate: any = []) => dispatch(setActividad(data, formToValidate)),
     [dispatch],
   );
   const deleteActividad = useCallback(

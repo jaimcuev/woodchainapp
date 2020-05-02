@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import Container from '../../components/Container';
 import { getArbolesPOATipoReporte, trozadoArbol } from '../../services/ArbolService';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import Title from '../../components/Title';
 import MyButton from '../../components/MyButton';
@@ -205,7 +205,7 @@ const ReportePatioRegistrarTrozaScreen = (props: any) => {
       </View>
       <View style={[styles.columnView, { borderRightColor: '#ededed', borderRightWidth: 1 }]}>
         <Title title="Trozas del arbol seleccionado" />
-        <View style={{ flex: 1, padding: 15 }}>
+        <ScrollView style={{ flex: 1, padding: 15 }}>
         { currentArbol && currentArbol.id && <Text style={{ fontWeight: 'bold', marginBottom: 15 }}>{ currentArbol.id }</Text> }
         <MyTextInput name="Volumen" 
         value={volumen} 
@@ -216,7 +216,7 @@ const ReportePatioRegistrarTrozaScreen = (props: any) => {
         <MyTextInput name="Largo" 
           value={largo} 
           onChange={ (id: string, text: string) => setLargo(text) } />
-        </View>
+        </ScrollView>
         <View style={styles.buttonsView}>
           <MyButton onPress={onPressRegistrarTroza} style={{ flex: 1, borderRadius: 0 }} name="Registrar Trozas del arbol" />
         </View>

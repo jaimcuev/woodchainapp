@@ -17,7 +17,7 @@ const alertaReducer = (state = initialState, action: any) => {
         message: action.message
       })
     case DESTROY_ALERTA:
-      return initialState;
+      return { status: '', message: '', options: [], isVisible: false, haveClose: false };
     default:
       return state;
   }

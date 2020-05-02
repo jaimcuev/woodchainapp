@@ -12,12 +12,22 @@ import MyMap from './MyMap';
 import MyTableDataEntry from './MyTableDataEntry';
 
 import { validateTextInput } from '../services/ValidateForm';
+import { error, loading } from '../actions/alerta.actions';
 
 const Formv3 = (props: any) => {
   const dispatch = useDispatch();
   const dataActividad = useSelector((state: any) => state.actividad.data);
   const formToValidate = useSelector((state: any) => state.actividad.formToValidate);
   const [canEdit, setCanEdit] = useState(true);
+
+  const errorAlerta = useCallback(
+    (message: string) => dispatch(error(message)),
+    [dispatch],
+  );
+  const loadingAlerta = useCallback(
+    (message: string) => dispatch(loading(message)),
+    [dispatch],
+  );
 
   const storeDataActividad = useCallback(
     (data: any) => dispatch(setDataActividad(data)),
@@ -211,7 +221,8 @@ const Formv3 = (props: any) => {
         onPressGuardar();
         setCanEdit(false);
       } else {
-        console.warn(messages);
+        // console.warn(messages);
+        errorAlerta(messages[0]);
       }
     } else {
       onPressGuardar();

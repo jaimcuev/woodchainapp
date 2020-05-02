@@ -127,6 +127,7 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     iniciarPGMF: () => {
       dispatch(setActividad('PGMF', [
+        'PGMFResumenEjecutivo'
       ]));
     },
     eliminarAnexo: () => {

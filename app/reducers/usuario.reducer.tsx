@@ -9,7 +9,7 @@ const usuarioReducer = (state = initialState, action: any) => {
         data: action.data
       };
     case DESTROY_USUARIO:
-      return initialState;
+      return { data: {} };
     default:
       return state;
   }

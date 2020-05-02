@@ -23,7 +23,7 @@ const actividadReducer = (state = initialState, action: any) => {
         formToValidate: action.formToValidate
       }
     case DESTROY_ACTIVIDAD:
-      return initialState;
+      return { nombre: '', data: {}, formToValidate: [] };
     default:
       return state;
   }
