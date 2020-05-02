@@ -104,6 +104,7 @@ export default [
               {
                 name: 'Especie',
                 id: 'informacionDetallada_especie',
+                readonly: true,
                 validate: {
                   required: true
                 }
@@ -111,6 +112,7 @@ export default [
               {
                 name: 'Codigo/Placa',
                 id: 'informacionDetallada_codigo',
+                readonly: true,
                 validate: {
                   required: true
                 }

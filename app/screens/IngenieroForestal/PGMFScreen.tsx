@@ -39,7 +39,12 @@ const PGMFScreen = (props: any) => {
             createPGMF(dataSubmit).then(resultado => {
               if (resultado.status) {
                 props.deleteActividad();
-                Navigation.popToRoot(props.componentId);
+                successAlerta( 'Transacción finalizada.', false, [
+                  {
+                    name: 'Volver al Inicio',
+                    onPress: () => Navigation.popToRoot(props.componentId)
+                  }
+                ] );
               } else {
                 
               }

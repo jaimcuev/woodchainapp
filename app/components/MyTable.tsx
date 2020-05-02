@@ -37,7 +37,6 @@ const MyTable = (props: any) => {
     } else {
       setRows(toAdd);
     }
-
     return () => {
     }
   }, [ Object.keys(props.local) ]);
@@ -153,6 +152,7 @@ const MyTable = (props: any) => {
                         ]}>
                         <TextInput
                           style={styles.textInput}
+                          editable={!column.readonly}
                           placeholder="Escribir aqui..."
                           defaultValue={props.local && props.local[`${column.id}_${i}`] && props.local[`${column.id}_${i}`].value || ""}
                           onChangeText={(text: string) =>
