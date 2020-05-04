@@ -33,6 +33,10 @@ export default [
                 value: 'listadoTrozasCuartonesMovilizar_especieNombreCientifico'
               },
               {
+                key: 'especie',
+                value: 'listadoTrozasCuartonesMovilizar_especieNombreComunComercial'
+              },
+              {
                 key: 'id',
                 value: 'listadoTrozasCuartonesMovilizar_codificacion'
               }
@@ -46,16 +50,19 @@ export default [
                 {
                   name: 'Nombre Cientifico',
                   id: 'listadoTrozasCuartonesMovilizar_especieNombreCientifico',
+                  readonly: true,
                 },
                 {
                   name: 'Nombre comun o comercial',
                   id: 'listadoTrozasCuartonesMovilizar_especieNombreComunComercial',
+                  readonly: true,
                 },
               ],
             },
             {
               name: 'Codificación',
               id: 'listadoTrozasCuartonesMovilizar_codificacion',
+              readonly: true,
             },
             {
               name: 'Dimensiones',

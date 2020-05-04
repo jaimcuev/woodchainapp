@@ -17,6 +17,8 @@ const MyTableDataEntry = (props: any) => {
   const [name, setName] = useState('');
   const [texts, setTexts] = useState([] as any);
 
+  const [enableDataEntry, setenableDataEntry] = useState(true);
+
   useEffect(() => {
     if( props.options && props.options.dataEntry ) {
       if( props.options.dataEntry ) {
@@ -69,6 +71,7 @@ const MyTableDataEntry = (props: any) => {
     });
     setLocal(_local);
     setIsOpen(false);
+    setenableDataEntry(false);
   };
 
   const onPressItem = (item: any) => {
@@ -90,7 +93,7 @@ const MyTableDataEntry = (props: any) => {
       <MyTable 
         {...props} 
         local={local}
-        dataEntry={true}
+        dataEntry={enableDataEntry}
         onPressAddItem={onPressAddItem}
       />
       <Modal isVisible={isOpen} style={styles.modalContainerView}>

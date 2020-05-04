@@ -133,6 +133,7 @@ const MyTable = (props: any) => {
                                 <TextInput
                                   key={sindex}
                                   placeholder="Escribir aqui..."
+                                  editable={!subcolumn.readonly}
                                   defaultValue={props.local && props.local[`${subcolumn.id}_${i}`] && props.local[`${subcolumn.id}_${i}`].value || ""}
                                   onChangeText={(text: string) =>
                                     props.onChange &&

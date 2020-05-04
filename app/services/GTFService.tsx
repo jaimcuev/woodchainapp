@@ -14,9 +14,10 @@ export const createGTF = async (data: string) => {
       return Respuesta(false, 'Error al conectarse con el servidor.');
     })
     .then(async response => {
-      if( response.pgmfId ) {
-        return Respuesta(true, 'Se ha generado la transacción de manera exitosa.', response.pgmfId);
+      if( response.gtfId ) {
+        return Respuesta(true, 'Se ha generado la transacción de manera exitosa.', response.gtfId);
       }
+
       return Respuesta(false, 'Se ha encontado un error al generar la transacción.');
     });
 };
