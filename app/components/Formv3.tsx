@@ -102,7 +102,7 @@ const Formv3 = (props: any) => {
       storeDataActividad(_dataActividad);
       Navigation.pop(props.componentId);
     } else {
-      console.warn(`No se ha establecido el formId para el formulario.`);
+      // console.warn(`No se ha establecido el formId para el formulario.`);
     }
   };
   

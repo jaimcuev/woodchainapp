@@ -91,7 +91,7 @@ const GTFScreen = (props: any) => {
           if ( usuarioId ) {
             dataSubmit['usuarioId'] = usuarioId;
             createGTF(dataSubmit).then(resultado => {
-              console.warn(resultado);
+              // console.warn(resultado);
               if (resultado.status) {
                 const gtfId = resultado.data;
 

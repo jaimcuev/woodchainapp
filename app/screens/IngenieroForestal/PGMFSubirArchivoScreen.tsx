@@ -41,7 +41,7 @@ const PGMFSubirArchivoScreen = (props: any) => {
         setFileContent(_fileContent);
       })
       .catch(err => {
-        console.warn(err.message, err.code);
+        // console.warn(err.message, err.code);
       });
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {

@@ -54,7 +54,7 @@ const POAScreen = (props: any) => {
                   const baby_arbol = data[index];
                   cambiarMensajeAlerta(`Enviando la transacción de registro del arbol ${index + 1}.`);
                   createArbol(baby_arbol).then((respuestica) => {
-                    console.warn(respuestica);
+                    // console.warn(respuestica);
                     if (data.length - 1 === index) {
                       callback();
                     } else {

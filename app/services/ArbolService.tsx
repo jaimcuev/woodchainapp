@@ -22,7 +22,7 @@ export const createArbol = async (data: string) => {
   })
   .then(res => res.json())
   .catch(() => {
-    console.warn(`${environment.apiURL}/arbol/create`);
+    // console.warn(`${environment.apiURL}/arbol/create`);
     return Respuesta(false, 'Error al conectarse con el servidor.');
   })
   .then(async response => {
